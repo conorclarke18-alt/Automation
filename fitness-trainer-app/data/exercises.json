@@ -1,0 +1,118 @@
+{
+  "lose_weight": {
+    "beginner": [
+      { "name": "Walking", "duration": "30 min", "type": "cardio", "calories": 150 },
+      { "name": "Jumping Jacks", "sets": 3, "reps": 15, "type": "cardio", "calories": 50 },
+      { "name": "Bodyweight Squats", "sets": 3, "reps": 12, "type": "strength", "calories": 40 },
+      { "name": "Knee Push-ups", "sets": 3, "reps": 10, "type": "strength", "calories": 30 },
+      { "name": "Bicycle Crunches", "sets": 3, "reps": 15, "type": "core", "calories": 30 },
+      { "name": "High Knees", "sets": 3, "reps": 20, "type": "cardio", "calories": 45 },
+      { "name": "Plank", "sets": 3, "duration": "20 sec", "type": "core", "calories": 20 }
+    ],
+    "intermediate": [
+      { "name": "Running", "duration": "30 min", "type": "cardio", "calories": 300 },
+      { "name": "Burpees", "sets": 4, "reps": 12, "type": "cardio", "calories": 80 },
+      { "name": "Mountain Climbers", "sets": 4, "reps": 20, "type": "cardio", "calories": 60 },
+      { "name": "Jump Squats", "sets": 4, "reps": 15, "type": "strength", "calories": 55 },
+      { "name": "Push-ups", "sets": 4, "reps": 15, "type": "strength", "calories": 45 },
+      { "name": "Plank", "sets": 3, "duration": "45 sec", "type": "core", "calories": 30 },
+      { "name": "Lunges", "sets": 4, "reps": 12, "type": "strength", "calories": 50 }
+    ],
+    "advanced": [
+      { "name": "HIIT Sprints", "duration": "25 min", "type": "cardio", "calories": 400 },
+      { "name": "Burpee Box Jumps", "sets": 5, "reps": 12, "type": "cardio", "calories": 100 },
+      { "name": "Thrusters", "sets": 5, "reps": 15, "type": "strength", "calories": 80 },
+      { "name": "Tuck Jumps", "sets": 4, "reps": 15, "type": "cardio", "calories": 70 },
+      { "name": "Diamond Push-ups", "sets": 4, "reps": 15, "type": "strength", "calories": 55 },
+      { "name": "V-ups", "sets": 4, "reps": 20, "type": "core", "calories": 45 },
+      { "name": "Jump Lunges", "sets": 4, "reps": 12, "type": "strength", "calories": 65 }
+    ]
+  },
+  "build_muscle": {
+    "beginner": [
+      { "name": "Push-ups", "sets": 3, "reps": 10, "type": "upper", "calories": 30 },
+      { "name": "Bodyweight Squats", "sets": 3, "reps": 15, "type": "lower", "calories": 40 },
+      { "name": "Dumbbell Rows", "sets": 3, "reps": 10, "type": "upper", "calories": 35 },
+      { "name": "Lunges", "sets": 3, "reps": 10, "type": "lower", "calories": 35 },
+      { "name": "Plank", "sets": 3, "duration": "30 sec", "type": "core", "calories": 20 },
+      { "name": "Dumbbell Curls", "sets": 3, "reps": 12, "type": "upper", "calories": 25 },
+      { "name": "Glute Bridges", "sets": 3, "reps": 15, "type": "lower", "calories": 30 }
+    ],
+    "intermediate": [
+      { "name": "Bench Press", "sets": 4, "reps": 10, "type": "upper", "calories": 50 },
+      { "name": "Barbell Squats", "sets": 4, "reps": 10, "type": "lower", "calories": 65 },
+      { "name": "Deadlifts", "sets": 4, "reps": 8, "type": "full", "calories": 70 },
+      { "name": "Overhead Press", "sets": 4, "reps": 10, "type": "upper", "calories": 45 },
+      { "name": "Pull-ups", "sets": 4, "reps": 8, "type": "upper", "calories": 50 },
+      { "name": "Romanian Deadlifts", "sets": 4, "reps": 10, "type": "lower", "calories": 55 },
+      { "name": "Dips", "sets": 3, "reps": 12, "type": "upper", "calories": 40 }
+    ],
+    "advanced": [
+      { "name": "Heavy Bench Press", "sets": 5, "reps": 5, "type": "upper", "calories": 65 },
+      { "name": "Heavy Barbell Squats", "sets": 5, "reps": 5, "type": "lower", "calories": 80 },
+      { "name": "Heavy Deadlifts", "sets": 5, "reps": 5, "type": "full", "calories": 90 },
+      { "name": "Weighted Pull-ups", "sets": 4, "reps": 8, "type": "upper", "calories": 60 },
+      { "name": "Barbell Rows", "sets": 4, "reps": 8, "type": "upper", "calories": 55 },
+      { "name": "Bulgarian Split Squats", "sets": 4, "reps": 10, "type": "lower", "calories": 60 },
+      { "name": "Weighted Dips", "sets": 4, "reps": 8, "type": "upper", "calories": 50 }
+    ]
+  },
+  "improve_endurance": {
+    "beginner": [
+      { "name": "Brisk Walking", "duration": "30 min", "type": "cardio", "calories": 150 },
+      { "name": "Cycling (Easy)", "duration": "20 min", "type": "cardio", "calories": 130 },
+      { "name": "Jump Rope", "sets": 3, "duration": "1 min", "type": "cardio", "calories": 40 },
+      { "name": "Swimming (Easy)", "duration": "20 min", "type": "cardio", "calories": 160 },
+      { "name": "Stair Climbing", "duration": "10 min", "type": "cardio", "calories": 80 },
+      { "name": "Dancing", "duration": "20 min", "type": "cardio", "calories": 120 },
+      { "name": "Yoga Flow", "duration": "20 min", "type": "flexibility", "calories": 70 }
+    ],
+    "intermediate": [
+      { "name": "Running", "duration": "40 min", "type": "cardio", "calories": 380 },
+      { "name": "Cycling", "duration": "45 min", "type": "cardio", "calories": 350 },
+      { "name": "Swimming", "duration": "30 min", "type": "cardio", "calories": 280 },
+      { "name": "Rowing", "duration": "25 min", "type": "cardio", "calories": 250 },
+      { "name": "Jump Rope", "sets": 5, "duration": "2 min", "type": "cardio", "calories": 100 },
+      { "name": "Circuit Training", "duration": "30 min", "type": "cardio", "calories": 300 },
+      { "name": "Stair Sprints", "sets": 8, "duration": "30 sec", "type": "cardio", "calories": 120 }
+    ],
+    "advanced": [
+      { "name": "Long Distance Run", "duration": "60 min", "type": "cardio", "calories": 600 },
+      { "name": "Cycling (Intense)", "duration": "60 min", "type": "cardio", "calories": 550 },
+      { "name": "Swimming (Intense)", "duration": "45 min", "type": "cardio", "calories": 450 },
+      { "name": "Trail Running", "duration": "50 min", "type": "cardio", "calories": 500 },
+      { "name": "Triathlon Training", "duration": "60 min", "type": "cardio", "calories": 580 },
+      { "name": "Rowing (Intense)", "duration": "40 min", "type": "cardio", "calories": 400 },
+      { "name": "HIIT Intervals", "duration": "35 min", "type": "cardio", "calories": 420 }
+    ]
+  },
+  "stay_fit": {
+    "beginner": [
+      { "name": "Walking", "duration": "20 min", "type": "cardio", "calories": 100 },
+      { "name": "Stretching", "duration": "15 min", "type": "flexibility", "calories": 40 },
+      { "name": "Bodyweight Squats", "sets": 2, "reps": 12, "type": "strength", "calories": 25 },
+      { "name": "Push-ups", "sets": 2, "reps": 8, "type": "strength", "calories": 20 },
+      { "name": "Plank", "sets": 2, "duration": "20 sec", "type": "core", "calories": 15 },
+      { "name": "Yoga", "duration": "20 min", "type": "flexibility", "calories": 70 },
+      { "name": "Light Jog", "duration": "15 min", "type": "cardio", "calories": 120 }
+    ],
+    "intermediate": [
+      { "name": "Jogging", "duration": "30 min", "type": "cardio", "calories": 250 },
+      { "name": "Full Body Stretch", "duration": "20 min", "type": "flexibility", "calories": 55 },
+      { "name": "Push-ups", "sets": 3, "reps": 15, "type": "strength", "calories": 40 },
+      { "name": "Squats", "sets": 3, "reps": 15, "type": "strength", "calories": 45 },
+      { "name": "Plank", "sets": 3, "duration": "45 sec", "type": "core", "calories": 25 },
+      { "name": "Cycling", "duration": "30 min", "type": "cardio", "calories": 250 },
+      { "name": "Lunges", "sets": 3, "reps": 12, "type": "strength", "calories": 40 }
+    ],
+    "advanced": [
+      { "name": "Running", "duration": "40 min", "type": "cardio", "calories": 380 },
+      { "name": "CrossFit WOD", "duration": "30 min", "type": "full", "calories": 350 },
+      { "name": "Weighted Squats", "sets": 4, "reps": 12, "type": "strength", "calories": 60 },
+      { "name": "Pull-ups", "sets": 4, "reps": 10, "type": "strength", "calories": 50 },
+      { "name": "Deadlifts", "sets": 4, "reps": 8, "type": "strength", "calories": 70 },
+      { "name": "Box Jumps", "sets": 4, "reps": 12, "type": "cardio", "calories": 55 },
+      { "name": "Kettlebell Swings", "sets": 4, "reps": 15, "type": "full", "calories": 60 }
+    ]
+  }
+}

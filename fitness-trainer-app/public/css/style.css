@@ -1,0 +1,437 @@
+/* ─── CSS Variables & Reset ──────────────────────────────── */
+:root {
+  --primary: #6c5ce7;
+  --primary-dark: #5a4bd1;
+  --secondary: #00cec9;
+  --accent: #fd79a8;
+  --success: #00b894;
+  --warning: #fdcb6e;
+  --danger: #e17055;
+  --dark: #2d3436;
+  --gray: #636e72;
+  --light-gray: #b2bec3;
+  --lighter-gray: #dfe6e9;
+  --bg: #f8f9fa;
+  --white: #ffffff;
+  --shadow: 0 4px 15px rgba(0,0,0,0.08);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: all 0.3s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ─── Typography ─────────────────────────────────────────── */
+h1 { font-size: 2rem; font-weight: 700; }
+h2 { font-size: 1.5rem; font-weight: 600; }
+h3 { font-size: 1.15rem; font-weight: 600; }
+
+/* ─── Layout ─────────────────────────────────────────────── */
+.app-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 90px;
+}
+
+/* ─── Header ─────────────────────────────────────────────── */
+.app-header {
+  background: linear-gradient(135deg, var(--primary), #a29bfe);
+  color: white;
+  padding: 24px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+.app-header h1 { font-size: 1.8rem; margin-bottom: 4px; }
+.app-header p { opacity: 0.9; font-size: 0.95rem; }
+.header-icon { font-size: 2.5rem; margin-bottom: 8px; }
+
+/* ─── Quote Banner ───────────────────────────────────────── */
+.quote-banner {
+  background: linear-gradient(135deg, #fd79a8, #e84393);
+  color: white;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.quote-banner::before {
+  content: '\201C';
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  font-size: 6rem;
+  opacity: 0.2;
+  font-family: Georgia, serif;
+}
+.quote-text { font-size: 1.1rem; font-style: italic; position: relative; z-index: 1; }
+.quote-author { margin-top: 8px; font-size: 0.9rem; opacity: 0.85; text-align: right; }
+
+/* ─── Cards ──────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+.card:hover { box-shadow: var(--shadow-lg); }
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--lighter-gray);
+}
+.card-header .icon { font-size: 1.5rem; }
+.card-title { font-size: 1.2rem; font-weight: 600; }
+
+/* ─── Navigation ─────────────────────────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  padding: 8px 16px;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+  z-index: 100;
+}
+.nav-btn {
+  flex: 1;
+  max-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  color: var(--gray);
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: var(--transition);
+  border-radius: var(--radius-sm);
+}
+.nav-btn .nav-icon { font-size: 1.4rem; margin-bottom: 2px; }
+.nav-btn.active { color: var(--primary); background: rgba(108,92,231,0.08); }
+.nav-btn:hover { color: var(--primary); }
+
+/* ─── Forms ──────────────────────────────────────────────── */
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: var(--dark);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+input, select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--lighter-gray);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: var(--white);
+}
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108,92,231,0.15);
+}
+
+/* ─── Buttons ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #a29bfe);
+  color: white;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.btn-success {
+  background: linear-gradient(135deg, var(--success), #55efc4);
+  color: white;
+}
+.btn-success:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.btn-small {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  width: auto;
+}
+
+/* ─── Goal Selection ─────────────────────────────────────── */
+.goal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.goal-option {
+  padding: 16px;
+  border: 2px solid var(--lighter-gray);
+  border-radius: var(--radius);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--white);
+}
+.goal-option:hover { border-color: var(--primary); }
+.goal-option.selected {
+  border-color: var(--primary);
+  background: rgba(108,92,231,0.08);
+}
+.goal-option .goal-icon { font-size: 2rem; margin-bottom: 6px; }
+.goal-option .goal-label { font-size: 0.85rem; font-weight: 600; }
+
+/* ─── Fitness Level ──────────────────────────────────────── */
+.level-options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.level-option {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--lighter-gray);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.level-option:hover { border-color: var(--secondary); }
+.level-option.selected { border-color: var(--secondary); background: rgba(0,206,201,0.08); color: var(--secondary); }
+
+/* ─── Workout Plan ───────────────────────────────────────── */
+.plan-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.summary-stat {
+  background: linear-gradient(135deg, var(--primary), #a29bfe);
+  color: white;
+  padding: 16px;
+  border-radius: var(--radius);
+  text-align: center;
+}
+.summary-stat .stat-value { font-size: 1.8rem; font-weight: 700; }
+.summary-stat .stat-label { font-size: 0.75rem; opacity: 0.85; text-transform: uppercase; }
+
+.day-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.day-header:hover { background: rgba(108,92,231,0.04); }
+.day-name { font-weight: 700; font-size: 1rem; }
+.day-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge-workout { background: rgba(0,206,201,0.15); color: #00b894; }
+.badge-rest { background: rgba(253,203,110,0.3); color: #e17055; }
+.day-exercises {
+  padding: 0 18px 14px;
+  display: none;
+}
+.day-exercises.open { display: block; }
+.exercise-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--lighter-gray);
+}
+.exercise-item:last-child { border-bottom: none; }
+.exercise-name { font-weight: 600; font-size: 0.95rem; }
+.exercise-detail { color: var(--gray); font-size: 0.85rem; }
+.exercise-calories { color: var(--danger); font-weight: 600; font-size: 0.85rem; }
+.day-tip {
+  background: rgba(108,92,231,0.06);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--primary-dark);
+  margin-top: 8px;
+}
+
+/* ─── Reminders ──────────────────────────────────────────── */
+.reminder-list { display: flex; flex-direction: column; gap: 12px; }
+.reminder-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  transition: var(--transition);
+}
+.reminder-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+.reminder-content { flex: 1; }
+.reminder-time { font-size: 0.8rem; color: var(--gray); font-weight: 600; }
+.reminder-message { font-size: 0.95rem; margin-top: 2px; }
+.reminder-active { background: rgba(108,92,231,0.08); border-left: 3px solid var(--primary); }
+
+/* ─── Stats ──────────────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.stat-card {
+  padding: 20px;
+  border-radius: var(--radius);
+  text-align: center;
+}
+.stat-card .stat-icon { font-size: 2rem; margin-bottom: 8px; }
+.stat-card .stat-number { font-size: 2rem; font-weight: 700; }
+.stat-card .stat-text { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; margin-top: 4px; }
+.stat-purple { background: rgba(108,92,231,0.1); color: var(--primary); }
+.stat-green { background: rgba(0,184,148,0.1); color: var(--success); }
+.stat-orange { background: rgba(225,112,85,0.1); color: var(--danger); }
+.stat-blue { background: rgba(0,206,201,0.1); color: var(--secondary); }
+
+.bmi-display {
+  text-align: center;
+  padding: 20px;
+  margin-top: 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--primary), #a29bfe);
+  color: white;
+}
+.bmi-value { font-size: 3rem; font-weight: 700; }
+.bmi-label { font-size: 1rem; opacity: 0.9; }
+.bmi-bar {
+  height: 8px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+  margin-top: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.bmi-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: white;
+  transition: width 0.8s ease;
+}
+
+/* ─── Sections (pages) ───────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Notification Toast ─────────────────────────────────── */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-weight: 600;
+  z-index: 200;
+  transform: translateX(120%);
+  transition: transform 0.4s ease;
+  max-width: 350px;
+  box-shadow: var(--shadow-lg);
+}
+.toast.show { transform: translateX(0); }
+.toast-success { background: var(--success); }
+.toast-info { background: var(--primary); }
+.toast-warning { background: var(--warning); color: var(--dark); }
+
+/* ─── Complete Button ────────────────────────────────────── */
+.complete-workout-btn {
+  margin-top: 12px;
+}
+
+/* ─── Streak Display ─────────────────────────────────────── */
+.streak-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: linear-gradient(135deg, #fdcb6e, #e17055);
+  color: white;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* ─── Welcome Screen ─────────────────────────────────────── */
+.welcome-screen {
+  text-align: center;
+  padding: 40px 20px;
+}
+.welcome-screen .welcome-icon { font-size: 4rem; margin-bottom: 16px; }
+.welcome-screen h2 { margin-bottom: 8px; }
+.welcome-screen p { color: var(--gray); margin-bottom: 24px; }
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .app-container { padding: 12px; padding-bottom: 80px; }
+  .plan-summary { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .goal-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  h1 { font-size: 1.5rem; }
+}
