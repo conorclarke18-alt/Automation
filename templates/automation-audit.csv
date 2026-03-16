@@ -1,0 +1,15 @@
+Task Name,Description,Minutes Per Task,Frequency Per Month,Time Cost (Hours/Month),Repetitive (Y/N),Rule-Based (Y/N),Requires Judgment (Y/N),Priority (High/Medium/Low),Notes
+Example: Copy form data to CRM,Manually copying new form submissions into CRM tool,15,20,5.0,Y,Y,N,High,Good automation candidate
+Example: Write client proposal,Creating custom proposals for new clients,60,4,4.0,N,N,Y,Low,Requires creativity - keep manual
+Example: Send weekly report,Compiling and sending weekly status report to clients,30,4,2.0,Y,Y,N,Medium,Same format every week
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,

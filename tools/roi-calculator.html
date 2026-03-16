@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation ROI Calculator</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        h1 { margin-bottom: 8px; }
+        .subtitle { color: #666; margin-bottom: 30px; }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card h2 { margin-bottom: 16px; font-size: 1.1em; }
+        .field { margin-bottom: 16px; }
+        .field label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 0.9em;
+        }
+        .field .hint { color: #888; font-size: 0.8em; margin-bottom: 4px; }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        input[type="number"]:focus { outline: none; border-color: #4a90d9; }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover { background: #1d4ed8; }
+        .results { display: none; }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .result-row:last-child { border-bottom: none; }
+        .result-label { color: #666; }
+        .result-value { font-weight: 700; font-size: 1.1em; }
+        .verdict {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .verdict.worth-it { background: #dcfce7; color: #166534; }
+        .verdict.maybe { background: #fef9c3; color: #854d0e; }
+        .verdict.not-worth-it { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <h1>Automation ROI Calculator</h1>
+    <p class="subtitle">Find out if an automation is worth your time and money.</p>
+
+    <div class="card">
+        <h2>Current Manual Task</h2>
+        <div class="field">
+            <label>Minutes per task</label>
+            <div class="hint">How long does this task take each time?</div>
+            <input type="number" id="minutes" min="1" value="15">
+        </div>
+        <div class="field">
+            <label>Times per month</label>
+            <div class="hint">How often do you do this task each month?</div>
+            <input type="number" id="frequency" min="1" value="20">
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Automation Setup</h2>
+        <div class="field">
+            <label>Setup time (hours)</label>
+            <div class="hint">How long will it take to build and test this automation?</div>
+            <input type="number" id="setupHours" min="0.5" step="0.5" value="1">
+        </div>
+        <div class="field">
+            <label>Monthly tool cost ($)</label>
+            <div class="hint">Monthly cost of the automation tool (e.g., Zapier plan). Enter 0 if free.</div>
+            <input type="number" id="toolCost" min="0" value="20">
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Your Time Value</h2>
+        <div class="field">
+            <label>Hourly rate ($)</label>
+            <div class="hint">What is your time worth per hour? (Use $50 if unsure)</div>
+            <input type="number" id="hourlyRate" min="1" value="50">
+        </div>
+    </div>
+
+    <button onclick="calculate()">Calculate ROI</button>
+
+    <div class="results card" id="results">
+        <h2>Results</h2>
+        <div class="result-row">
+            <span class="result-label">Time saved per month</span>
+            <span class="result-value" id="timeSaved"></span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Value of time saved per month</span>
+            <span class="result-value" id="valueSaved"></span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Setup cost (one-time)</span>
+            <span class="result-value" id="setupCost"></span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Monthly tool cost</span>
+            <span class="result-value" id="monthlyCost"></span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Net monthly savings</span>
+            <span class="result-value" id="netSavings"></span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">Payback period</span>
+            <span class="result-value" id="payback"></span>
+        </div>
+        <div class="result-row">
+            <span class="result-label">12-month ROI</span>
+            <span class="result-value" id="roi"></span>
+        </div>
+        <div class="verdict" id="verdict"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            const minutes = parseFloat(document.getElementById('minutes').value);
+            const frequency = parseFloat(document.getElementById('frequency').value);
+            const setupHours = parseFloat(document.getElementById('setupHours').value);
+            const toolCost = parseFloat(document.getElementById('toolCost').value);
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value);
+
+            const hoursSaved = (minutes * frequency) / 60;
+            const valueSaved = hoursSaved * hourlyRate;
+            const setupCost = setupHours * hourlyRate;
+            const netMonthlySavings = valueSaved - toolCost;
+            const paybackMonths = netMonthlySavings > 0 ? setupCost / netMonthlySavings : Infinity;
+            const yearlyReturn = (netMonthlySavings * 12) - setupCost;
+            const roiPercent = setupCost > 0 ? (yearlyReturn / (setupCost + toolCost * 12)) * 100 : Infinity;
+
+            document.getElementById('timeSaved').textContent = hoursSaved.toFixed(1) + ' hours';
+            document.getElementById('valueSaved').textContent = '$' + valueSaved.toFixed(0);
+            document.getElementById('setupCost').textContent = '$' + setupCost.toFixed(0);
+            document.getElementById('monthlyCost').textContent = '$' + toolCost.toFixed(0);
+            document.getElementById('netSavings').textContent = '$' + netMonthlySavings.toFixed(0);
+            document.getElementById('payback').textContent = paybackMonths === Infinity ? 'Never' : paybackMonths.toFixed(1) + ' months';
+            document.getElementById('roi').textContent = roiPercent === Infinity ? 'Infinite' : roiPercent.toFixed(0) + '%';
+
+            const verdictEl = document.getElementById('verdict');
+            if (paybackMonths <= 3) {
+                verdictEl.className = 'verdict worth-it';
+                verdictEl.textContent = 'Worth it! Payback in under 3 months. Build this automation.';
+            } else if (paybackMonths <= 6) {
+                verdictEl.className = 'verdict maybe';
+                verdictEl.textContent = 'Maybe worth it. Consider if there are other benefits beyond time savings.';
+            } else {
+                verdictEl.className = 'verdict not-worth-it';
+                verdictEl.textContent = 'Probably not worth it. Look for higher-impact automations first.';
+            }
+
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
