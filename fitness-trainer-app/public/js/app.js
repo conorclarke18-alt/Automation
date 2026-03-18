@@ -118,7 +118,8 @@ async function saveProfile() {
     // Schedule daily reminders
     scheduleBrowserReminders(user);
 
-    // Navigate to plan
+    // Show dashboard and navigate to plan
+    showDashboard();
     setTimeout(() => navigateTo('plan'), 1000);
   } catch (e) {
     showToast('Failed to save profile. Please try again.', 'warning');
@@ -129,23 +130,47 @@ async function saveProfile() {
 async function loadSavedUser() {
   const userId = localStorage.getItem('fitnessUserId');
   if (!userId) {
-    navigateTo('profile');
+    navigateTo('home');
     return;
   }
 
   try {
     const res = await fetch(`/api/profile/${userId}`);
     if (!res.ok) {
-      navigateTo('profile');
+      navigateTo('home');
       return;
     }
     currentUser = await res.json();
     populateProfileForm(currentUser);
+    showDashboard();
     navigateTo('home');
-    loadPlan();
   } catch (e) {
-    navigateTo('profile');
+    navigateTo('home');
   }
+}
+
+function showDashboard() {
+  if (!currentUser) return;
+  document.getElementById('welcome-area').style.display = 'none';
+  document.getElementById('home-dashboard').style.display = 'block';
+
+  const hour = new Date().getHours();
+  let greeting = 'Good evening';
+  if (hour < 12) greeting = 'Good morning';
+  else if (hour < 18) greeting = 'Good afternoon';
+
+  document.getElementById('home-greeting').textContent = `${greeting}, ${currentUser.name}!`;
+
+  const goalLabels = {
+    lose_weight: 'Lose Weight',
+    build_muscle: 'Build Muscle',
+    improve_endurance: 'Improve Endurance',
+    stay_fit: 'Stay Fit & Healthy'
+  };
+  const goalText = goalLabels[currentUser.goal] || currentUser.goal;
+  const streakText = currentUser.streak > 0 ? ` | ${currentUser.streak} day streak` : '';
+  document.getElementById('home-summary').textContent =
+    `Goal: ${goalText} | Level: ${currentUser.fitnessLevel}${streakText}`;
 }
 
 function populateProfileForm(user) {
