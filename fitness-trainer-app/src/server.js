@@ -2,385 +2,291 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const cron = require('node-cron');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const USERS_FILE = path.join(DATA_DIR, 'users.json');
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Data paths
-const DATA_DIR = path.join(__dirname, '..', 'data');
-const USERS_FILE = path.join(DATA_DIR, 'users.json');
-const QUOTES_FILE = path.join(DATA_DIR, 'quotes.json');
-const EXERCISES_FILE = path.join(DATA_DIR, 'exercises.json');
+// --- Data helpers ---
 
-// Helper: read/write JSON
-function readJSON(filePath) {
-  if (!fs.existsSync(filePath)) return [];
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+function loadJSON(file) {
+  return JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), 'utf-8'));
 }
 
-function writeJSON(filePath, data) {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+function loadUsers() {
+  if (!fs.existsSync(USERS_FILE)) return {};
+  return JSON.parse(fs.readFileSync(USERS_FILE, 'utf-8'));
 }
 
-// Load static data
-const quotes = readJSON(QUOTES_FILE);
-const exercises = readJSON(EXERCISES_FILE);
+function saveUsers(users) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+}
 
-// ─── API Routes ──────────────────────────────────────────────
+// --- Profile ---
 
-// Get a random motivational quote
-app.get('/api/quote', (req, res) => {
-  const quote = quotes[Math.floor(Math.random() * quotes.length)];
-  res.json(quote);
-});
-
-// Create or update user profile
 app.post('/api/profile', (req, res) => {
-  const { name, age, weight, height, weightUnit, heightUnit, gender, goal, fitnessLevel, reminderTime } = req.body;
+  const { name, age, weight, weightUnit, height, heightUnit, gender, goal, level, reminderTime } = req.body;
 
-  if (!name || !weight || !height || !goal || !fitnessLevel) {
-    return res.status(400).json({ error: 'Missing required fields: name, weight, height, goal, fitnessLevel' });
+  if (!name || !age || !weight || !height || !goal || !level) {
+    return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const users = readJSON(USERS_FILE);
-
-  // Calculate BMI (convert to metric if needed)
-  let weightKg = parseFloat(weight);
-  let heightCm = parseFloat(height);
-
-  if (weightUnit === 'lbs') weightKg = weightKg * 0.453592;
-  if (heightUnit === 'inches') heightCm = heightCm * 2.54;
-
+  const weightKg = weightUnit === 'lbs' ? weight * 0.453592 : weight;
+  const heightCm = heightUnit === 'inches' ? height * 2.54 : height;
   const heightM = heightCm / 100;
-  const bmi = (weightKg / (heightM * heightM)).toFixed(1);
+  const bmi = +(weightKg / (heightM * heightM)).toFixed(1);
 
-  let bmiCategory;
+  let bmiCategory = 'Normal';
   if (bmi < 18.5) bmiCategory = 'Underweight';
-  else if (bmi < 25) bmiCategory = 'Normal';
-  else if (bmi < 30) bmiCategory = 'Overweight';
-  else bmiCategory = 'Obese';
+  else if (bmi >= 25 && bmi < 30) bmiCategory = 'Overweight';
+  else if (bmi >= 30) bmiCategory = 'Obese';
 
-  // Check for existing user by name
-  const existingIndex = users.findIndex(u => u.name.toLowerCase() === name.toLowerCase());
+  const users = loadUsers();
+  const existingId = req.body.userId;
+  const userId = existingId && users[existingId] ? existingId : uuidv4();
 
-  const user = {
-    id: existingIndex >= 0 ? users[existingIndex].id : uuidv4(),
-    name,
-    age: parseInt(age) || null,
-    weight: parseFloat(weight),
-    weightUnit: weightUnit || 'kg',
-    height: parseFloat(height),
-    heightUnit: heightUnit || 'cm',
-    gender: gender || 'other',
-    goal,
-    fitnessLevel,
-    bmi: parseFloat(bmi),
-    bmiCategory,
-    reminderTime: reminderTime || '08:00',
-    createdAt: existingIndex >= 0 ? users[existingIndex].createdAt : new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    completedWorkouts: existingIndex >= 0 ? users[existingIndex].completedWorkouts : [],
-    streak: existingIndex >= 0 ? users[existingIndex].streak : 0
+  users[userId] = {
+    ...users[userId],
+    userId, name, age: +age, weight: +weight, weightUnit: weightUnit || 'kg',
+    height: +height, heightUnit: heightUnit || 'cm', gender: gender || 'other',
+    goal, level, reminderTime: reminderTime || '08:00',
+    bmi, bmiCategory,
+    completedWorkouts: users[userId]?.completedWorkouts || [],
+    createdAt: users[userId]?.createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   };
 
-  if (existingIndex >= 0) {
-    users[existingIndex] = user;
-  } else {
-    users.push(user);
-  }
-
-  writeJSON(USERS_FILE, users);
-  res.json(user);
+  saveUsers(users);
+  res.json({ userId, profile: users[userId] });
 });
 
-// Get user profile
 app.get('/api/profile/:id', (req, res) => {
-  const users = readJSON(USERS_FILE);
-  const user = users.find(u => u.id === req.params.id);
+  const users = loadUsers();
+  const user = users[req.params.id];
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);
 });
 
-// Generate a fitness plan for the user
+// --- Workout Plan ---
+
 app.get('/api/plan/:userId', (req, res) => {
-  const users = readJSON(USERS_FILE);
-  const user = users.find(u => u.id === req.params.userId);
+  const users = loadUsers();
+  const user = users[req.params.userId];
   if (!user) return res.status(404).json({ error: 'User not found' });
 
-  const goalExercises = exercises[user.goal];
-  if (!goalExercises) return res.status(400).json({ error: 'Invalid goal' });
+  const exercises = loadJSON('exercises.json');
+  const pool = exercises[user.goal]?.[user.level] || exercises.stay_fit.beginner;
 
-  const levelExercises = goalExercises[user.fitnessLevel];
-  if (!levelExercises) return res.status(400).json({ error: 'Invalid fitness level' });
+  const restDays = user.level === 'beginner' ? [3, 7] : user.level === 'intermediate' ? [4] : [7];
+  const exercisesPerDay = user.level === 'advanced' ? 5 : 4;
+  const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-  // Build a 7-day plan
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  const restDays = user.fitnessLevel === 'beginner' ? [3, 6] :
-                   user.fitnessLevel === 'intermediate' ? [3] : [6];
+  const tips = {
+    lose_weight: [
+      'Keep your heart rate in the fat-burning zone (60-70% max HR)',
+      'Pair today\'s workout with a calorie deficit for best results',
+      'HIIT burns calories even after your workout ends',
+      'Focus on compound movements to maximize calorie burn',
+      'Stay hydrated — water boosts metabolism by up to 30%',
+      'Active recovery is key — try a light walk today',
+      'Consistency beats intensity. Keep showing up!'
+    ],
+    build_muscle: [
+      'Progressive overload: aim to increase weight or reps each week',
+      'Eat 1.6-2.2g protein per kg of bodyweight for optimal gains',
+      'Compound lifts build the most muscle — prioritize them',
+      'Mind-muscle connection: focus on the squeeze',
+      'Sleep 7-9 hours — muscles grow during recovery',
+      'Use controlled negatives to maximize time under tension',
+      'Deload weeks every 4-6 weeks prevent overtraining'
+    ],
+    improve_endurance: [
+      'Build your aerobic base with steady-state cardio',
+      'Breathing rhythm: inhale for 3 steps, exhale for 2',
+      'Cross-training prevents overuse injuries',
+      'Gradually increase duration by 10% per week max',
+      'Fuel with complex carbs 2-3 hours before training',
+      'Recovery runs should feel conversational pace',
+      'Track your resting heart rate — lower means fitter'
+    ],
+    stay_fit: [
+      'Variety keeps your body guessing and adapting',
+      'Balance strength, cardio, and flexibility each week',
+      'Listen to your body — adjust intensity as needed',
+      'Functional movements improve daily life quality',
+      'Stretching after workouts prevents tightness',
+      'Aim for 150+ minutes of moderate activity per week',
+      'Enjoy the process — fitness is a lifestyle, not a race'
+    ]
+  };
 
-  const weeklyPlan = days.map((day, index) => {
-    if (restDays.includes(index)) {
-      return { day, isRestDay: true, exercises: [], tip: 'Rest and recover. Stay hydrated and get good sleep!' };
+  const plan = dayNames.map((day, i) => {
+    const dayNum = i + 1;
+    if (restDays.includes(dayNum)) {
+      return { day, dayNumber: dayNum, isRest: true, tip: 'Rest and recover. Light stretching or a walk is great for active recovery.' };
     }
 
-    // Pick 4-5 exercises for the day, rotating through the list
-    const count = user.fitnessLevel === 'advanced' ? 5 : 4;
+    const startIdx = (i * exercisesPerDay) % pool.length;
     const dayExercises = [];
-    for (let i = 0; i < count; i++) {
-      dayExercises.push(levelExercises[(index * count + i) % levelExercises.length]);
+    for (let j = 0; j < exercisesPerDay; j++) {
+      dayExercises.push({ ...pool[(startIdx + j) % pool.length] });
     }
 
     const totalCalories = dayExercises.reduce((sum, ex) => sum + (ex.calories || 0), 0);
+    const totalDuration = dayExercises.reduce((sum, ex) => sum + (ex.duration || 5), 0);
 
     return {
-      day,
-      isRestDay: false,
+      day, dayNumber: dayNum, isRest: false,
       exercises: dayExercises,
-      estimatedCalories: totalCalories,
-      tip: getDayTip(index, user.goal)
+      totalCalories, totalDuration,
+      tip: tips[user.goal]?.[i] || tips.stay_fit[i]
     };
   });
 
-  // Calculate weekly summary
-  const totalWeeklyCalories = weeklyPlan.reduce((sum, d) => sum + (d.estimatedCalories || 0), 0);
-  const workoutDays = weeklyPlan.filter(d => !d.isRestDay).length;
+  const workoutDays = plan.filter(d => !d.isRest);
+  const totalWeeklyCalories = workoutDays.reduce((sum, d) => sum + d.totalCalories, 0);
 
-  const plan = {
-    userId: user.id,
-    userName: user.name,
-    goal: formatGoal(user.goal),
-    fitnessLevel: user.fitnessLevel,
-    bmi: user.bmi,
-    bmiCategory: user.bmiCategory,
-    weeklyPlan,
-    summary: {
-      workoutDaysPerWeek: workoutDays,
-      restDaysPerWeek: 7 - workoutDays,
-      estimatedWeeklyCaloriesBurned: totalWeeklyCalories,
-      recommendation: getRecommendation(user)
-    },
-    generatedAt: new Date().toISOString()
-  };
-
-  res.json(plan);
-});
-
-// Log a completed workout
-app.post('/api/workout/complete', (req, res) => {
-  const { userId, day, exercises: completedExercises } = req.body;
-  const users = readJSON(USERS_FILE);
-  const userIndex = users.findIndex(u => u.id === userId);
-  if (userIndex < 0) return res.status(404).json({ error: 'User not found' });
-
-  const today = new Date().toISOString().split('T')[0];
-  const workout = {
-    date: today,
-    day,
-    exercises: completedExercises || [],
-    completedAt: new Date().toISOString()
-  };
-
-  users[userIndex].completedWorkouts.push(workout);
-
-  // Update streak
-  const workouts = users[userIndex].completedWorkouts;
-  if (workouts.length >= 2) {
-    const lastDate = new Date(workouts[workouts.length - 2].date);
-    const thisDate = new Date(today);
-    const diffDays = Math.floor((thisDate - lastDate) / (1000 * 60 * 60 * 24));
-    if (diffDays <= 2) {
-      users[userIndex].streak += 1;
-    } else {
-      users[userIndex].streak = 1;
-    }
-  } else {
-    users[userIndex].streak = 1;
-  }
-
-  writeJSON(USERS_FILE, users);
   res.json({
-    message: 'Workout logged!',
-    streak: users[userIndex].streak,
-    totalWorkouts: users[userIndex].completedWorkouts.length
+    plan,
+    summary: {
+      workoutDays: workoutDays.length,
+      restDays: restDays.length,
+      totalWeeklyCalories,
+      goal: user.goal,
+      level: user.level
+    }
   });
 });
 
-// Get user stats
-app.get('/api/stats/:userId', (req, res) => {
-  const users = readJSON(USERS_FILE);
-  const user = users.find(u => u.id === req.params.userId);
+// --- Complete Workout ---
+
+app.post('/api/workout/complete', (req, res) => {
+  const { userId, dayNumber, exercises, caloriesBurned } = req.body;
+  const users = loadUsers();
+  const user = users[userId];
   if (!user) return res.status(404).json({ error: 'User not found' });
 
-  const totalWorkouts = user.completedWorkouts.length;
-  const totalCalories = user.completedWorkouts.reduce((sum, w) => {
-    return sum + (w.exercises || []).reduce((s, e) => s + (e.calories || 0), 0);
-  }, 0);
+  const entry = {
+    date: new Date().toISOString(),
+    dayNumber,
+    exercises: exercises || [],
+    caloriesBurned: caloriesBurned || 0
+  };
 
-  // Workouts this week
+  user.completedWorkouts.push(entry);
+
+  // Calculate streak
+  const dates = user.completedWorkouts
+    .map(w => new Date(w.date).toDateString())
+    .filter((d, i, arr) => arr.indexOf(d) === i)
+    .sort((a, b) => new Date(b) - new Date(a));
+
+  let streak = 1;
+  for (let i = 1; i < dates.length; i++) {
+    const diff = (new Date(dates[i - 1]) - new Date(dates[i])) / (1000 * 60 * 60 * 24);
+    if (diff <= 2) streak++;
+    else break;
+  }
+
+  user.streak = streak;
+  saveUsers(users);
+
+  res.json({ success: true, streak, totalWorkouts: user.completedWorkouts.length });
+});
+
+// --- Stats ---
+
+app.get('/api/stats/:userId', (req, res) => {
+  const users = loadUsers();
+  const user = users[req.params.userId];
+  if (!user) return res.status(404).json({ error: 'User not found' });
+
+  const completed = user.completedWorkouts || [];
+  const totalCalories = completed.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
+
   const now = new Date();
   const weekStart = new Date(now);
   weekStart.setDate(now.getDate() - now.getDay());
   weekStart.setHours(0, 0, 0, 0);
+  const thisWeek = completed.filter(w => new Date(w.date) >= weekStart).length;
 
-  const thisWeekWorkouts = user.completedWorkouts.filter(w => new Date(w.date) >= weekStart).length;
+  // Weekly history (last 8 weeks)
+  const weeklyHistory = [];
+  for (let i = 7; i >= 0; i--) {
+    const start = new Date(now);
+    start.setDate(now.getDate() - now.getDay() - i * 7);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 7);
+    const count = completed.filter(w => {
+      const d = new Date(w.date);
+      return d >= start && d < end;
+    }).length;
+    const cal = completed.filter(w => {
+      const d = new Date(w.date);
+      return d >= start && d < end;
+    }).reduce((s, w) => s + (w.caloriesBurned || 0), 0);
+    weeklyHistory.push({ weekStart: start.toISOString(), workouts: count, calories: cal });
+  }
 
   res.json({
-    totalWorkouts,
-    totalCaloriesBurned: totalCalories,
-    currentStreak: user.streak,
-    thisWeekWorkouts,
+    totalWorkouts: completed.length,
+    totalCalories,
+    streak: user.streak || 0,
+    thisWeek,
     bmi: user.bmi,
     bmiCategory: user.bmiCategory,
-    memberSince: user.createdAt
+    memberSince: user.createdAt,
+    weeklyHistory,
+    goal: user.goal,
+    level: user.level
   });
 });
 
-// Get today's reminders
+// --- Reminders ---
+
 app.get('/api/reminders/:userId', (req, res) => {
-  const users = readJSON(USERS_FILE);
-  const user = users.find(u => u.id === req.params.userId);
+  const users = loadUsers();
+  const user = users[req.params.userId];
   if (!user) return res.status(404).json({ error: 'User not found' });
 
-  const today = new Date();
-  const dayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1; // Monday = 0
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  const todayName = days[dayIndex];
-
+  const quotes = loadJSON('quotes.json');
   const quote = quotes[Math.floor(Math.random() * quotes.length)];
 
-  const reminders = [
-    {
-      type: 'workout',
-      time: user.reminderTime,
-      message: `Time for your ${todayName} workout! Let's crush it, ${user.name}!`,
-      day: todayName
-    },
-    {
-      type: 'hydration',
-      time: '10:00',
-      message: 'Stay hydrated! Aim for at least 8 glasses of water today.'
-    },
-    {
-      type: 'motivation',
-      time: '07:00',
-      message: `"${quote.text}" - ${quote.author}`
-    },
-    {
-      type: 'nutrition',
-      time: '12:00',
-      message: getNutritionTip(user.goal)
-    },
-    {
-      type: 'sleep',
-      time: '21:00',
-      message: 'Wind down and aim for 7-9 hours of sleep. Recovery is key!'
-    }
-  ];
+  const nutritionTips = {
+    lose_weight: 'Focus on high-protein, low-calorie meals. Fill half your plate with vegetables.',
+    build_muscle: 'Eat a protein-rich meal within 30 minutes of your workout for recovery.',
+    improve_endurance: 'Complex carbs are your fuel. Eat oats, sweet potatoes, or brown rice.',
+    stay_fit: 'Eat a balanced meal with protein, healthy fats, and complex carbs.'
+  };
 
-  res.json({ today: todayName, reminders, quote });
+  res.json([
+    { type: 'motivation', time: '07:00', icon: 'sparkles', title: 'Daily Motivation', message: `"${quote.text}" — ${quote.author}` },
+    { type: 'workout', time: user.reminderTime || '08:00', icon: 'fitness_center', title: 'Workout Time!', message: `Time to crush your ${user.goal.replace('_', ' ')} workout, ${user.name}!` },
+    { type: 'hydration', time: '10:00', icon: 'water_drop', title: 'Stay Hydrated', message: 'Drink a full glass of water. Aim for 8 glasses today!' },
+    { type: 'nutrition', time: '12:00', icon: 'restaurant', title: 'Nutrition Check', message: nutritionTips[user.goal] || nutritionTips.stay_fit },
+    { type: 'sleep', time: '21:00', icon: 'bedtime', title: 'Wind Down', message: 'Start your bedtime routine. Quality sleep = better gains!' }
+  ]);
 });
 
-// ─── Helper Functions ────────────────────────────────────────
+// --- Quote ---
 
-function formatGoal(goal) {
-  const map = {
-    lose_weight: 'Lose Weight',
-    build_muscle: 'Build Muscle',
-    improve_endurance: 'Improve Endurance',
-    stay_fit: 'Stay Fit & Healthy'
-  };
-  return map[goal] || goal;
-}
+app.get('/api/quote', (_req, res) => {
+  const quotes = loadJSON('quotes.json');
+  res.json(quotes[Math.floor(Math.random() * quotes.length)]);
+});
 
-function getDayTip(dayIndex, goal) {
-  const tips = {
-    lose_weight: [
-      'Focus on keeping your heart rate elevated during cardio segments.',
-      'Keep rest periods short (30-45 seconds) to maximize calorie burn.',
-      'Pair your workout with a calorie-deficit diet for best results.',
-      'Rest day - go for a light walk to stay active.',
-      'Try to increase intensity slightly from last week.',
-      'Finish strong! Weekend workouts set the tone for next week.',
-      'Rest day - meal prep healthy food for the week ahead.'
-    ],
-    build_muscle: [
-      'Focus on proper form over heavy weight.',
-      'Increase weight slightly when exercises feel too easy.',
-      'Eat protein within 30 minutes of finishing your workout.',
-      'Rest day - stretch and foam roll to aid recovery.',
-      'Focus on the mind-muscle connection today.',
-      'Progressive overload is key - track your weights!',
-      'Rest day - prioritize sleep for muscle recovery.'
-    ],
-    improve_endurance: [
-      'Start at a comfortable pace and gradually increase.',
-      'Focus on your breathing rhythm today.',
-      'Hydrate well before, during, and after your workout.',
-      'Rest day - light stretching and mobility work.',
-      'Push your limits a little further today.',
-      'Cross-training day - try a different cardio exercise.',
-      'Rest day - recovery is part of training.'
-    ],
-    stay_fit: [
-      'Enjoy your workout - consistency beats intensity.',
-      'Mix it up to keep things interesting.',
-      'Listen to your body and adjust intensity as needed.',
-      'Rest day - take a walk in nature.',
-      'Focus on flexibility and mobility today.',
-      'Try something new or invite a friend to join.',
-      'Rest day - reflect on your progress this week.'
-    ]
-  };
-  return (tips[goal] || tips.stay_fit)[dayIndex];
-}
+// --- SPA fallback ---
 
-function getNutritionTip(goal) {
-  const tips = {
-    lose_weight: 'Focus on lean proteins and vegetables. Aim for a slight calorie deficit of 300-500 calories.',
-    build_muscle: 'Eat 1.6-2.2g of protein per kg of bodyweight. Prioritize whole foods and complex carbs.',
-    improve_endurance: 'Fuel up with complex carbohydrates before workouts. Keep electrolytes balanced.',
-    stay_fit: 'Eat a balanced diet with plenty of fruits, vegetables, lean proteins, and whole grains.'
-  };
-  return tips[goal] || tips.stay_fit;
-}
-
-function getRecommendation(user) {
-  const recs = [];
-
-  if (user.bmi > 30) {
-    recs.push('Consider consulting a healthcare provider before starting an intense exercise program.');
-  }
-  if (user.goal === 'lose_weight') {
-    recs.push('Combine this workout plan with a balanced, calorie-controlled diet for best results.');
-    recs.push('Aim to burn 300-500 more calories than you consume daily.');
-  }
-  if (user.goal === 'build_muscle') {
-    recs.push('Ensure adequate protein intake (1.6-2.2g per kg of bodyweight).');
-    recs.push('Get 7-9 hours of sleep for optimal muscle recovery.');
-  }
-  if (user.goal === 'improve_endurance') {
-    recs.push('Gradually increase duration and intensity over weeks.');
-    recs.push('Stay well-hydrated and monitor your heart rate during workouts.');
-  }
-  recs.push('Warm up for 5-10 minutes before each workout and cool down after.');
-  recs.push('Listen to your body and rest if you feel pain or extreme fatigue.');
-
-  return recs;
-}
-
-// ─── Serve Frontend ──────────────────────────────────────────
-
-app.get('*', (req, res) => {
+app.get('*', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-// ─── Start Server ────────────────────────────────────────────
-
 app.listen(PORT, () => {
-  console.log(`\n  Fitness Trainer App running at http://localhost:${PORT}\n`);
+  console.log(`FitCoach Pro running at http://localhost:${PORT}`);
 });

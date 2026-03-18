@@ -1,7 +1,7 @@
 {
-  "name": "fitness-trainer-app",
-  "version": "1.0.0",
-  "description": "Virtual Personal Fitness Trainer - Get personalized workout plans, daily reminders, and motivational quotes",
+  "name": "fitcoach-pro",
+  "version": "2.0.0",
+  "description": "FitCoach Pro - Your AI-Powered Personal Fitness Trainer",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "node-cron": "^3.0.3",
     "uuid": "^9.0.0"
   }
 }

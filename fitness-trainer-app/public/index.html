@@ -3,235 +3,261 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FitCoach - Your Virtual Personal Trainer</title>
+  <title>FitCoach Pro</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 </head>
 <body>
-
-  <div class="app-container">
-
-    <!-- Header -->
-    <div class="app-header">
-      <div class="header-icon">&#127947;</div>
-      <h1>FitCoach</h1>
-      <p>Your Virtual Personal Trainer</p>
-    </div>
-
-    <!-- Quote Banner -->
-    <div class="quote-banner">
-      <div class="quote-text" id="quote-text">Loading motivation...</div>
-      <div class="quote-author" id="quote-author"></div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- ═══════════════════════════════════════════════════ -->
-    <!-- PAGE: Home -->
-    <!-- ═══════════════════════════════════════════════════ -->
-    <div class="page" id="page-home">
-      <div class="welcome-screen" id="welcome-area">
-        <div class="welcome-icon">&#128170;</div>
-        <h2>Welcome to FitCoach!</h2>
-        <p>Set up your profile to get a personalized fitness plan, daily reminders, and motivation to reach your goals.</p>
-        <button class="btn btn-primary" onclick="navigateTo('profile')">
-          &#9998; Set Up Profile
-        </button>
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo">
+        <span class="material-icons-round">fitness_center</span>
+        <span class="logo-text">FitCoach <span class="pro-badge">PRO</span></span>
       </div>
+      <div class="quote-banner" id="quoteBanner"></div>
+    </div>
+  </header>
 
-      <div id="home-dashboard" style="display:none;">
-        <div class="card">
-          <div class="card-header">
-            <span class="icon">&#128075;</span>
-            <span class="card-title" id="home-greeting">Welcome back!</span>
-          </div>
-          <p style="color: var(--gray); margin-bottom: 16px;" id="home-summary"></p>
-          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <button class="btn btn-primary btn-small" onclick="navigateTo('plan')">&#128203; View Plan</button>
-            <button class="btn btn-success btn-small" onclick="navigateTo('reminders')">&#128276; Reminders</button>
-          </div>
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+
+    <!-- HOME PAGE -->
+    <section class="page active" id="page-home">
+      <div class="welcome-section" id="welcomeSection">
+        <div class="welcome-card">
+          <h1>Welcome to FitCoach Pro</h1>
+          <p>Your personal AI-powered fitness companion. Build custom workout plans, track progress, and stay motivated.</p>
+          <button class="btn btn-primary btn-lg" onclick="app.navigate('profile')">
+            <span class="material-icons-round">person_add</span>
+            Get Started
+          </button>
         </div>
       </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════ -->
-    <!-- PAGE: Profile Setup -->
-    <!-- ═══════════════════════════════════════════════════ -->
-    <div class="page" id="page-profile">
-      <div class="card">
-        <div class="card-header">
-          <span class="icon">&#128100;</span>
-          <span class="card-title">Your Profile</span>
+      <div class="dashboard hidden" id="dashboard">
+        <div class="greeting-card">
+          <div class="greeting-text">
+            <h2 id="greetingMsg">Good morning!</h2>
+            <p id="greetingSubtext">Ready to crush your goals today?</p>
+          </div>
+          <div class="streak-badge" id="streakBadge">
+            <span class="streak-fire">&#128293;</span>
+            <span class="streak-count" id="streakCount">0</span>
+            <span class="streak-label">day streak</span>
+          </div>
         </div>
 
-        <form id="profile-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">Full Name *</label>
-              <input type="text" id="name" placeholder="e.g. Alex Johnson" required>
-            </div>
-            <div class="form-group">
-              <label for="age">Age</label>
-              <input type="number" id="age" placeholder="e.g. 28" min="10" max="100">
-            </div>
+        <div class="quick-stats" id="quickStats">
+          <div class="stat-card">
+            <span class="material-icons-round stat-icon">directions_run</span>
+            <div class="stat-value" id="qsWorkouts">0</div>
+            <div class="stat-label">Workouts</div>
           </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="weight">Weight *</label>
-              <div style="display: flex; gap: 8px;">
-                <input type="number" id="weight" placeholder="e.g. 75" step="0.1" required style="flex: 1;">
-                <select id="weight-unit" style="width: 80px;">
-                  <option value="kg">kg</option>
-                  <option value="lbs">lbs</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="height">Height *</label>
-              <div style="display: flex; gap: 8px;">
-                <input type="number" id="height" placeholder="e.g. 175" step="0.1" required style="flex: 1;">
-                <select id="height-unit" style="width: 80px;">
-                  <option value="cm">cm</option>
-                  <option value="inches">in</option>
-                </select>
-              </div>
-            </div>
+          <div class="stat-card">
+            <span class="material-icons-round stat-icon">local_fire_department</span>
+            <div class="stat-value" id="qsCalories">0</div>
+            <div class="stat-label">Calories</div>
           </div>
+          <div class="stat-card">
+            <span class="material-icons-round stat-icon">calendar_today</span>
+            <div class="stat-value" id="qsThisWeek">0</div>
+            <div class="stat-label">This Week</div>
+          </div>
+        </div>
 
+        <div class="today-card" id="todayCard">
+          <h3>Today's Workout</h3>
+          <div id="todayWorkout" class="today-workout"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section class="page" id="page-profile">
+      <div class="page-header">
+        <h2><span class="material-icons-round">person</span> Your Profile</h2>
+      </div>
+      <form id="profileForm" class="profile-form">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" placeholder="25" min="10" max="100" required>
+          </div>
           <div class="form-group">
             <label for="gender">Gender</label>
             <select id="gender">
               <option value="male">Male</option>
               <option value="female">Female</option>
-              <option value="other">Prefer not to say</option>
+              <option value="other">Other</option>
             </select>
           </div>
-
           <div class="form-group">
-            <label>What's your fitness goal? *</label>
-            <div class="goal-grid">
-              <div class="goal-option" data-goal="lose_weight">
-                <div class="goal-icon">&#9878;</div>
-                <div class="goal-label">Lose Weight</div>
-              </div>
-              <div class="goal-option" data-goal="build_muscle">
-                <div class="goal-icon">&#128170;</div>
-                <div class="goal-label">Build Muscle</div>
-              </div>
-              <div class="goal-option" data-goal="improve_endurance">
-                <div class="goal-icon">&#127939;</div>
-                <div class="goal-label">Improve Endurance</div>
-              </div>
-              <div class="goal-option" data-goal="stay_fit">
-                <div class="goal-icon">&#10084;</div>
-                <div class="goal-label">Stay Fit & Healthy</div>
-              </div>
+            <label for="weight">Weight</label>
+            <div class="input-with-unit">
+              <input type="number" id="weight" placeholder="70" min="20" max="500" required>
+              <select id="weightUnit">
+                <option value="kg">kg</option>
+                <option value="lbs">lbs</option>
+              </select>
             </div>
           </div>
-
           <div class="form-group">
-            <label>Your fitness level? *</label>
-            <div class="level-options">
-              <div class="level-option" data-level="beginner">
-                &#127793; Beginner
-              </div>
-              <div class="level-option" data-level="intermediate">
-                &#128170; Intermediate
-              </div>
-              <div class="level-option" data-level="advanced">
-                &#128293; Advanced
-              </div>
+            <label for="height">Height</label>
+            <div class="input-with-unit">
+              <input type="number" id="height" placeholder="175" min="50" max="300" required>
+              <select id="heightUnit">
+                <option value="cm">cm</option>
+                <option value="inches">in</option>
+              </select>
             </div>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="reminder-time">Daily Workout Reminder Time</label>
-            <input type="time" id="reminder-time" value="08:00">
+        <div class="form-section">
+          <label>Fitness Goal</label>
+          <div class="option-grid" id="goalGrid">
+            <button type="button" class="option-btn" data-value="lose_weight">
+              <span class="material-icons-round">monitor_weight</span>
+              <span>Lose Weight</span>
+            </button>
+            <button type="button" class="option-btn" data-value="build_muscle">
+              <span class="material-icons-round">fitness_center</span>
+              <span>Build Muscle</span>
+            </button>
+            <button type="button" class="option-btn" data-value="improve_endurance">
+              <span class="material-icons-round">directions_run</span>
+              <span>Endurance</span>
+            </button>
+            <button type="button" class="option-btn" data-value="stay_fit">
+              <span class="material-icons-round">favorite</span>
+              <span>Stay Fit</span>
+            </button>
           </div>
+        </div>
 
-          <button type="submit" class="btn btn-primary">
-            &#127947; Generate My Fitness Plan
+        <div class="form-section">
+          <label>Fitness Level</label>
+          <div class="option-grid three-col" id="levelGrid">
+            <button type="button" class="option-btn" data-value="beginner">
+              <span class="material-icons-round">eco</span>
+              <span>Beginner</span>
+            </button>
+            <button type="button" class="option-btn" data-value="intermediate">
+              <span class="material-icons-round">trending_up</span>
+              <span>Intermediate</span>
+            </button>
+            <button type="button" class="option-btn" data-value="advanced">
+              <span class="material-icons-round">bolt</span>
+              <span>Advanced</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reminderTime">Daily Workout Reminder</label>
+          <input type="time" id="reminderTime" value="08:00">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-full">
+          <span class="material-icons-round">save</span>
+          Save Profile
+        </button>
+      </form>
+    </section>
+
+    <!-- PLAN PAGE -->
+    <section class="page" id="page-plan">
+      <div class="page-header">
+        <h2><span class="material-icons-round">calendar_month</span> Weekly Plan</h2>
+      </div>
+      <div class="plan-summary" id="planSummary"></div>
+      <div class="plan-days" id="planDays"></div>
+    </section>
+
+    <!-- TIMER PAGE (NEW!) -->
+    <section class="page" id="page-timer">
+      <div class="page-header">
+        <h2><span class="material-icons-round">timer</span> Workout Timer</h2>
+      </div>
+      <div class="timer-container">
+        <div class="timer-display" id="timerDisplay">
+          <div class="timer-ring">
+            <svg viewBox="0 0 200 200">
+              <circle class="timer-bg" cx="100" cy="100" r="90" />
+              <circle class="timer-progress" id="timerProgress" cx="100" cy="100" r="90" />
+            </svg>
+            <div class="timer-text">
+              <span class="timer-time" id="timerTime">00:00</span>
+              <span class="timer-label" id="timerLabel">Ready</span>
+            </div>
+          </div>
+        </div>
+        <div class="timer-presets">
+          <button class="preset-btn" onclick="app.setTimer(30)">30s</button>
+          <button class="preset-btn" onclick="app.setTimer(60)">1 min</button>
+          <button class="preset-btn" onclick="app.setTimer(90)">90s</button>
+          <button class="preset-btn active" onclick="app.setTimer(120)">2 min</button>
+          <button class="preset-btn" onclick="app.setTimer(300)">5 min</button>
+        </div>
+        <div class="timer-controls">
+          <button class="btn btn-circle btn-secondary" onclick="app.resetTimer()">
+            <span class="material-icons-round">replay</span>
           </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════ -->
-    <!-- PAGE: Workout Plan -->
-    <!-- ═══════════════════════════════════════════════════ -->
-    <div class="page" id="page-plan">
-      <div class="card">
-        <div class="card-header">
-          <span class="icon">&#128203;</span>
-          <span class="card-title">Your Weekly Workout Plan</span>
+          <button class="btn btn-circle btn-primary btn-xl" id="timerStartBtn" onclick="app.toggleTimer()">
+            <span class="material-icons-round" id="timerStartIcon">play_arrow</span>
+          </button>
+          <button class="btn btn-circle btn-secondary" onclick="app.skipTimer()">
+            <span class="material-icons-round">skip_next</span>
+          </button>
         </div>
       </div>
-      <div id="plan-content">
-        <div class="welcome-screen">
-          <p>Loading your personalized plan...</p>
-        </div>
-      </div>
-    </div>
+    </section>
 
-    <!-- ═══════════════════════════════════════════════════ -->
-    <!-- PAGE: Reminders -->
-    <!-- ═══════════════════════════════════════════════════ -->
-    <div class="page" id="page-reminders">
-      <div class="card">
-        <div class="card-header">
-          <span class="icon">&#128276;</span>
-          <span class="card-title">Daily Reminders & Alerts</span>
-        </div>
-        <p style="color: var(--gray); font-size: 0.9rem; margin-bottom: 12px;">
-          Your coach keeps you on track throughout the day with workout reminders, hydration checks, nutrition tips, and sleep alerts.
-        </p>
+    <!-- STATS PAGE -->
+    <section class="page" id="page-stats">
+      <div class="page-header">
+        <h2><span class="material-icons-round">bar_chart</span> Progress</h2>
       </div>
-      <div id="reminders-content">
-        <p style="text-align: center; color: var(--gray);">Loading reminders...</p>
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="chart-card" id="chartCard">
+        <h3>Weekly Activity</h3>
+        <div class="bar-chart" id="barChart"></div>
       </div>
-    </div>
+      <div class="bmi-card" id="bmiCard"></div>
+    </section>
 
-    <!-- ═══════════════════════════════════════════════════ -->
-    <!-- PAGE: Stats -->
-    <!-- ═══════════════════════════════════════════════════ -->
-    <div class="page" id="page-stats">
-      <div class="card">
-        <div class="card-header">
-          <span class="icon">&#128200;</span>
-          <span class="card-title">Your Progress</span>
-        </div>
-      </div>
-      <div id="stats-content">
-        <p style="text-align: center; color: var(--gray);">Loading stats...</p>
-      </div>
-    </div>
-
-  </div>
+  </main>
 
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" data-page="home">
-      <span class="nav-icon">&#127968;</span>
-      Home
+    <button class="nav-btn active" data-page="home" onclick="app.navigate('home')">
+      <span class="material-icons-round">home</span>
+      <span>Home</span>
     </button>
-    <button class="nav-btn" data-page="profile">
-      <span class="nav-icon">&#128100;</span>
-      Profile
+    <button class="nav-btn" data-page="plan" onclick="app.navigate('plan')">
+      <span class="material-icons-round">calendar_month</span>
+      <span>Plan</span>
     </button>
-    <button class="nav-btn" data-page="plan">
-      <span class="nav-icon">&#128203;</span>
-      Plan
+    <button class="nav-btn" data-page="timer" onclick="app.navigate('timer')">
+      <span class="material-icons-round">timer</span>
+      <span>Timer</span>
     </button>
-    <button class="nav-btn" data-page="reminders">
-      <span class="nav-icon">&#128276;</span>
-      Alerts
+    <button class="nav-btn" data-page="stats" onclick="app.navigate('stats')">
+      <span class="material-icons-round">bar_chart</span>
+      <span>Stats</span>
     </button>
-    <button class="nav-btn" data-page="stats">
-      <span class="nav-icon">&#128200;</span>
-      Stats
+    <button class="nav-btn" data-page="profile" onclick="app.navigate('profile')">
+      <span class="material-icons-round">person</span>
+      <span>Profile</span>
     </button>
   </nav>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
 
   <script src="/js/app.js"></script>
 </body>
