@@ -1,0 +1,104 @@
+{
+  "templates": [
+    {
+      "id": "initial-approach-hr",
+      "name": "Initial Approach — HR / Recruitment Team",
+      "category": "initial",
+      "targetRole": "HR / Recruitment",
+      "channel": "email",
+      "subject": "Permanent Adult Social Workers — Reducing Your Agency Dependency",
+      "body": "Hi {{contactName}},\n\nI'm reaching out because I know {{councilName}} will be under real pressure to reduce agency spend in adult social care — every council is.\n\nAt Pro Social Partners, we work exclusively on permanent adult social work placements. We don't do temp or locum — our entire focus is helping councils like yours build stable, long-term teams.\n\nHere's why that matters to you:\n\n- We only put forward candidates who genuinely want permanent roles (not agency workers looking for a short-term gig)\n- Our retention rate across placements is strong because we screen for commitment, not just qualifications\n- We understand the pressures your adult social care teams face — safeguarding, Care Act assessments, mental capacity work — so we match on capability, not just availability\n\nI'd love 15 minutes to understand what your adult teams need right now. No hard sell — just a conversation about whether we can help reduce your reliance on agency staff.\n\nWould you be open to a quick call this week?\n\nBest regards,\n{{senderName}}\nPro Social Partners\n{{senderPhone}}",
+      "notes": "Send Monday-Wednesday morning for best open rates. Personalise the first line if you know their specific challenges (e.g., high turnover in a particular team)."
+    },
+    {
+      "id": "initial-approach-director",
+      "name": "Initial Approach — Director of Adult Services",
+      "category": "initial",
+      "targetRole": "Director",
+      "channel": "email",
+      "subject": "Supporting {{councilName}}'s Adult Social Care Workforce Strategy",
+      "body": "Dear {{contactName}},\n\nI appreciate your time is extremely valuable, so I'll keep this brief.\n\nI run Pro Social Partners — a specialist recruitment partner focused solely on permanent adult social work placements for local authorities.\n\nThe reason I'm writing to you specifically: most recruitment agencies flood councils with temporary workers. That keeps your agency spend high and your teams unstable. We take the opposite approach.\n\nWe work with councils to:\n\n- Fill hard-to-recruit permanent positions in adult safeguarding, mental health, learning disabilities, and hospital discharge teams\n- Reduce long-term agency dependency by finding social workers who stay\n- Provide market intelligence on salary benchmarking so your offers are competitive first time\n\nI'd welcome the opportunity to have a brief conversation about {{councilName}}'s permanent recruitment challenges in adult services. Even if now isn't the right time, I'm happy to share our latest salary and market data for your region — no strings attached.\n\nWith kind regards,\n{{senderName}}\nPro Social Partners\n{{senderPhone}}",
+      "notes": "Directors care about strategy, budget, and CQC/ADASS outcomes. Lead with the business case (reducing agency spend), not the transactional pitch. Keep it under 200 words."
+    },
+    {
+      "id": "initial-approach-head-of-service",
+      "name": "Initial Approach — Head of Service / Service Manager",
+      "category": "initial",
+      "targetRole": "Head of Service",
+      "channel": "email",
+      "subject": "Permanent Adult Social Workers for {{councilName}} — Can We Help?",
+      "body": "Hi {{contactName}},\n\nI know how hard it is to run adult social care teams when you're carrying vacancies and relying on agency staff who don't know your systems, your cases, or your patch.\n\nI run Pro Social Partners and we specialise exclusively in permanent adult social worker recruitment. I wanted to reach out because:\n\n- We have qualified social workers on our books right now who are actively looking for permanent roles in {{region}}\n- We only work with candidates who want to commit to a council long-term — no temp-to-perm hopefuls\n- We take the time to understand your team dynamics, caseload pressures, and what kind of social worker will actually thrive in your service\n\nI'm not going to pretend I know your exact challenges, but I'd genuinely love to learn about them. If you've got 10 minutes for a call, I'll come prepared with what we're seeing in the market for adult social workers in your area.\n\nWould any day this week work for a quick chat?\n\nBest,\n{{senderName}}\nPro Social Partners\n{{senderPhone}}",
+      "notes": "Heads of Service feel the pain daily — empty desks, high caseloads, agency workers who leave. Speak to their lived experience. Be human, not corporate."
+    },
+    {
+      "id": "initial-approach-linkedin",
+      "name": "Initial Approach — LinkedIn Connection Request",
+      "category": "initial",
+      "targetRole": "Any",
+      "channel": "linkedin",
+      "subject": "",
+      "body": "Hi {{contactName}}, I run Pro Social Partners — we specialise in permanent adult social work recruitment for local authorities. I'd love to connect as I work closely with councils in {{region}} and always value building relationships with the people shaping adult social care services. No sales pitch — just keen to be a useful contact if you ever need support filling permanent roles.",
+      "notes": "LinkedIn connection notes are limited to 300 characters. This is designed to get the accept. Follow up with a proper message 2-3 days after they accept."
+    },
+    {
+      "id": "followup-1-value",
+      "name": "Follow-up 1 (Day 3) — Value-Add Market Insight",
+      "category": "followup",
+      "targetRole": "Any",
+      "channel": "email",
+      "subject": "Re: Adult Social Worker Market Update — {{region}}",
+      "body": "Hi {{contactName}},\n\nJust a quick follow-up to my earlier email. I wanted to share something that might be useful regardless of whether we work together.\n\nWe've been tracking permanent adult social worker salary trends across {{region}} and I've noticed:\n\n- Average salaries for experienced ASWs have shifted to [£X-£Y range] in your area\n- Councils offering flexible/hybrid working are filling roles 40% faster\n- The biggest draw for permanent candidates right now isn't just salary — it's manageable caseloads and good supervision\n\nI put together a brief overview that might help with your workforce planning. Happy to send it across if it'd be useful.\n\nNo pressure at all — just want to be helpful.\n\nBest,\n{{senderName}}\nPro Social Partners",
+      "notes": "This is the golden follow-up. You're giving, not asking. Update the salary figures with real data from your market. This positions you as a knowledgeable partner, not just another agency."
+    },
+    {
+      "id": "followup-2-check-in",
+      "name": "Follow-up 2 (Day 7) — Soft Check-in",
+      "category": "followup",
+      "targetRole": "Any",
+      "channel": "email",
+      "subject": "Quick check-in — permanent adult SW roles at {{councilName}}",
+      "body": "Hi {{contactName}},\n\nJust checking in — I know how busy things get in adult social care, so I completely understand if my earlier emails got buried.\n\nI'd still love the chance to introduce Pro Social Partners properly. We're a small, specialist agency and we deliberately only focus on permanent adult social work — it means we give your roles our full attention rather than spreading ourselves across hundreds of temp bookings.\n\nIf now isn't the right time, no problem at all. But if there's a better person for me to speak to about permanent recruitment in your adult services, I'd be grateful for a point in the right direction.\n\nThanks,\n{{senderName}}\nPro Social Partners\n{{senderPhone}}",
+      "notes": "The 'point me to the right person' line is powerful — it gives them an easy way to respond without committing to anything, and often gets forwarded to the right decision-maker."
+    },
+    {
+      "id": "followup-3-candidate",
+      "name": "Follow-up 3 (Day 14) — Strong Candidate Available",
+      "category": "followup",
+      "targetRole": "Any",
+      "channel": "email",
+      "subject": "Experienced Adult Social Worker available — {{region}} area",
+      "body": "Hi {{contactName}},\n\nApologies for the persistence — I promise this is worth a quick read.\n\nWe currently have an experienced adult social worker looking for a permanent role in the {{region}} area. They have:\n\n- [X] years post-qualification experience\n- Strong background in [adult safeguarding / mental health / learning disabilities / hospital discharge]\n- Experience working in a local authority setting\n- Genuine commitment to a permanent position\n\nI know unsolicited CVs aren't always welcome, but I wanted to flag this person as they're exactly the type of social worker councils struggle to find — experienced, stable, and actually wanting permanent.\n\nIf you have any current or upcoming vacancies in your adult teams, I'd be happy to share more details. If not, no worries at all.\n\nBest,\n{{senderName}}\nPro Social Partners\n{{senderPhone}}",
+      "notes": "CRITICAL: Only send this if you genuinely have a strong candidate. Tailor the bullet points to a real person on your books. Nothing kills credibility faster than a phantom candidate. This email has the highest response rate in the sequence."
+    },
+    {
+      "id": "followup-4-final",
+      "name": "Follow-up 4 (Day 30) — Final Touch / Re-queue",
+      "category": "followup",
+      "targetRole": "Any",
+      "channel": "email",
+      "subject": "Last one from me (for now) — Pro Social Partners",
+      "body": "Hi {{contactName}},\n\nI don't want to be that recruiter who won't take a hint, so this will be my last email for a while.\n\nIf permanent adult social worker recruitment is something {{councilName}} needs help with — now or in the future — I'm here. We're not going anywhere and we'll always prioritise quality over volume.\n\nI'll keep you on my radar for any relevant market updates, but I won't chase you. If the time is ever right, you know where to find me.\n\nWishing you and your teams all the best,\n{{senderName}}\nPro Social Partners\n{{senderPhone}}",
+      "notes": "This is the 'breakup email' — it works because it removes pressure. Many councils come back weeks or months later when a vacancy opens. After this, re-queue the council for a fresh approach in 3 months with new value (market report, new candidate, sector news)."
+    },
+    {
+      "id": "post-meeting-thanks",
+      "name": "Post-Meeting Thank You",
+      "category": "relationship",
+      "targetRole": "Any",
+      "channel": "email",
+      "subject": "Great speaking with you — next steps from Pro Social Partners",
+      "body": "Hi {{contactName}},\n\nReally appreciated you taking the time to speak with me today about {{councilName}}'s adult social care recruitment needs.\n\nJust to confirm what we discussed:\n\n- [Summary point 1 — e.g., You're looking to fill 2 permanent ASW roles in the safeguarding team]\n- [Summary point 2 — e.g., Key requirements include AMHP qualification and Care Act experience]\n- [Summary point 3 — e.g., Salary range is £X-£Y with hybrid working available]\n\nFrom our side, here's what happens next:\n\n1. I'll review our current candidate pool against your requirements\n2. I'll send across any strong matches within [X working days]\n3. I'll include a brief summary of each candidate so you can quickly see who's worth interviewing\n\nIf there's anything I've missed or you'd like to add, just let me know. Looking forward to working together.\n\nBest regards,\n{{senderName}}\nPro Social Partners\n{{senderPhone}}",
+      "notes": "Send within 2 hours of the meeting. The summary shows you listened. The next steps show you're professional and proactive. This is where you separate yourself from every other agency."
+    },
+    {
+      "id": "terms-proposal",
+      "name": "Terms of Business Proposal",
+      "category": "relationship",
+      "targetRole": "HR / Recruitment",
+      "channel": "email",
+      "subject": "Pro Social Partners — Terms of Business for {{councilName}}",
+      "body": "Hi {{contactName}},\n\nFollowing our recent conversations, please find below our proposed terms for permanent adult social work recruitment:\n\n**Our Fee Structure:**\n- Standard fee: [X]% of starting salary\n- Rebate period: [X] months (pro-rata refund if the candidate leaves within this period)\n- Payment terms: [X] days from candidate start date\n\n**What's Included:**\n- Full candidate sourcing, screening, and qualification verification\n- Social Work England registration checks\n- DBS status confirmation\n- Reference verification (minimum 2 professional references)\n- Right to work checks\n- Skills and competency assessment tailored to your team's needs\n- [X]-month free replacement guarantee\n\n**Our Commitment:**\n- Dedicated consultant for all your adult social care roles\n- Maximum [X] CVs per role (quality over quantity)\n- Honest market feedback if a role is going to be hard to fill\n- Regular updates throughout the process — you'll never have to chase us\n\nI'm very open to discussing these terms to find something that works for both sides. Happy to jump on a call whenever suits.\n\nBest regards,\n{{senderName}}\nPro Social Partners\n{{senderPhone}}",
+      "notes": "Customise the fee %, rebate period, and payment terms before sending. Being transparent about terms builds trust. The 'honest market feedback' line sets you apart — councils are sick of agencies who overpromise."
+    }
+  ]
+}

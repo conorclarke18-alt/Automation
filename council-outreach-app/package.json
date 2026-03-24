@@ -1,0 +1,14 @@
+{
+  "name": "council-outreach-app",
+  "version": "1.0.0",
+  "description": "Pro Social Partners — Council Outreach System for permanent adult social worker recruitment",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  }
+}
