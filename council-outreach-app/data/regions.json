@@ -1,0 +1,223 @@
+{
+  "regions": [
+    {
+      "name": "East Midlands",
+      "councils": [
+        { "name": "Derby City Council", "type": "Unitary" },
+        { "name": "Derbyshire County Council", "type": "County" },
+        { "name": "Leicester City Council", "type": "Unitary" },
+        { "name": "Leicestershire County Council", "type": "County" },
+        { "name": "Lincolnshire County Council", "type": "County" },
+        { "name": "Northamptonshire Council", "type": "Unitary" },
+        { "name": "Nottingham City Council", "type": "Unitary" },
+        { "name": "Nottinghamshire County Council", "type": "County" },
+        { "name": "Rutland County Council", "type": "Unitary" }
+      ]
+    },
+    {
+      "name": "West Midlands",
+      "councils": [
+        { "name": "Birmingham City Council", "type": "Metropolitan" },
+        { "name": "Coventry City Council", "type": "Metropolitan" },
+        { "name": "Dudley Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Herefordshire Council", "type": "Unitary" },
+        { "name": "Sandwell Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Shropshire Council", "type": "Unitary" },
+        { "name": "Solihull Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Staffordshire County Council", "type": "County" },
+        { "name": "Stoke-on-Trent City Council", "type": "Unitary" },
+        { "name": "Telford and Wrekin Council", "type": "Unitary" },
+        { "name": "Walsall Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Warwickshire County Council", "type": "County" },
+        { "name": "Wolverhampton City Council", "type": "Metropolitan" },
+        { "name": "Worcestershire County Council", "type": "County" }
+      ]
+    },
+    {
+      "name": "London",
+      "councils": [
+        { "name": "Barking and Dagenham", "type": "London Borough" },
+        { "name": "Barnet", "type": "London Borough" },
+        { "name": "Bexley", "type": "London Borough" },
+        { "name": "Brent", "type": "London Borough" },
+        { "name": "Bromley", "type": "London Borough" },
+        { "name": "Camden", "type": "London Borough" },
+        { "name": "City of London", "type": "London Borough" },
+        { "name": "Croydon", "type": "London Borough" },
+        { "name": "Ealing", "type": "London Borough" },
+        { "name": "Enfield", "type": "London Borough" },
+        { "name": "Greenwich", "type": "London Borough" },
+        { "name": "Hackney", "type": "London Borough" },
+        { "name": "Hammersmith and Fulham", "type": "London Borough" },
+        { "name": "Haringey", "type": "London Borough" },
+        { "name": "Harrow", "type": "London Borough" },
+        { "name": "Havering", "type": "London Borough" },
+        { "name": "Hillingdon", "type": "London Borough" },
+        { "name": "Hounslow", "type": "London Borough" },
+        { "name": "Islington", "type": "London Borough" },
+        { "name": "Kensington and Chelsea", "type": "London Borough" },
+        { "name": "Kingston upon Thames", "type": "London Borough" },
+        { "name": "Lambeth", "type": "London Borough" },
+        { "name": "Lewisham", "type": "London Borough" },
+        { "name": "Merton", "type": "London Borough" },
+        { "name": "Newham", "type": "London Borough" },
+        { "name": "Redbridge", "type": "London Borough" },
+        { "name": "Richmond upon Thames", "type": "London Borough" },
+        { "name": "Southwark", "type": "London Borough" },
+        { "name": "Sutton", "type": "London Borough" },
+        { "name": "Tower Hamlets", "type": "London Borough" },
+        { "name": "Waltham Forest", "type": "London Borough" },
+        { "name": "Wandsworth", "type": "London Borough" },
+        { "name": "Westminster", "type": "London Borough" }
+      ]
+    },
+    {
+      "name": "South East",
+      "councils": [
+        { "name": "Bracknell Forest Council", "type": "Unitary" },
+        { "name": "Brighton and Hove City Council", "type": "Unitary" },
+        { "name": "Buckinghamshire Council", "type": "Unitary" },
+        { "name": "East Sussex County Council", "type": "County" },
+        { "name": "Hampshire County Council", "type": "County" },
+        { "name": "Isle of Wight Council", "type": "Unitary" },
+        { "name": "Kent County Council", "type": "County" },
+        { "name": "Medway Council", "type": "Unitary" },
+        { "name": "Milton Keynes Council", "type": "Unitary" },
+        { "name": "Oxfordshire County Council", "type": "County" },
+        { "name": "Portsmouth City Council", "type": "Unitary" },
+        { "name": "Reading Borough Council", "type": "Unitary" },
+        { "name": "Slough Borough Council", "type": "Unitary" },
+        { "name": "Southampton City Council", "type": "Unitary" },
+        { "name": "Surrey County Council", "type": "County" },
+        { "name": "West Berkshire Council", "type": "Unitary" },
+        { "name": "West Sussex County Council", "type": "County" },
+        { "name": "Windsor and Maidenhead", "type": "Unitary" },
+        { "name": "Wokingham Borough Council", "type": "Unitary" }
+      ]
+    },
+    {
+      "name": "South West",
+      "councils": [
+        { "name": "Bath and North East Somerset Council", "type": "Unitary" },
+        { "name": "Bournemouth, Christchurch and Poole Council", "type": "Unitary" },
+        { "name": "Bristol City Council", "type": "Unitary" },
+        { "name": "Cornwall Council", "type": "Unitary" },
+        { "name": "Devon County Council", "type": "County" },
+        { "name": "Dorset Council", "type": "Unitary" },
+        { "name": "Gloucestershire County Council", "type": "County" },
+        { "name": "North Somerset Council", "type": "Unitary" },
+        { "name": "Plymouth City Council", "type": "Unitary" },
+        { "name": "Somerset Council", "type": "Unitary" },
+        { "name": "South Gloucestershire Council", "type": "Unitary" },
+        { "name": "Swindon Borough Council", "type": "Unitary" },
+        { "name": "Torbay Council", "type": "Unitary" },
+        { "name": "Wiltshire Council", "type": "Unitary" }
+      ]
+    },
+    {
+      "name": "North East",
+      "councils": [
+        { "name": "County Durham Council", "type": "Unitary" },
+        { "name": "Darlington Borough Council", "type": "Unitary" },
+        { "name": "Gateshead Council", "type": "Metropolitan" },
+        { "name": "Hartlepool Borough Council", "type": "Unitary" },
+        { "name": "Middlesbrough Council", "type": "Unitary" },
+        { "name": "Newcastle City Council", "type": "Metropolitan" },
+        { "name": "North Tyneside Council", "type": "Metropolitan" },
+        { "name": "Northumberland County Council", "type": "Unitary" },
+        { "name": "Redcar and Cleveland Borough Council", "type": "Unitary" },
+        { "name": "South Tyneside Council", "type": "Metropolitan" },
+        { "name": "Stockton-on-Tees Borough Council", "type": "Unitary" },
+        { "name": "Sunderland City Council", "type": "Metropolitan" }
+      ]
+    },
+    {
+      "name": "North West",
+      "councils": [
+        { "name": "Blackburn with Darwen Borough Council", "type": "Unitary" },
+        { "name": "Blackpool Council", "type": "Unitary" },
+        { "name": "Bolton Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Bury Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Cheshire East Council", "type": "Unitary" },
+        { "name": "Cheshire West and Chester Council", "type": "Unitary" },
+        { "name": "Cumbria County Council", "type": "County" },
+        { "name": "Halton Borough Council", "type": "Unitary" },
+        { "name": "Knowsley Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Lancashire County Council", "type": "County" },
+        { "name": "Liverpool City Council", "type": "Metropolitan" },
+        { "name": "Manchester City Council", "type": "Metropolitan" },
+        { "name": "Oldham Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Rochdale Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Salford City Council", "type": "Metropolitan" },
+        { "name": "Sefton Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "St Helens Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Stockport Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Tameside Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Trafford Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Warrington Borough Council", "type": "Unitary" },
+        { "name": "Wigan Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Wirral Metropolitan Borough Council", "type": "Metropolitan" }
+      ]
+    },
+    {
+      "name": "Yorkshire and the Humber",
+      "councils": [
+        { "name": "Barnsley Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Bradford Metropolitan District Council", "type": "Metropolitan" },
+        { "name": "Calderdale Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Doncaster Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "East Riding of Yorkshire Council", "type": "Unitary" },
+        { "name": "Kingston upon Hull City Council", "type": "Unitary" },
+        { "name": "Kirklees Council", "type": "Metropolitan" },
+        { "name": "Leeds City Council", "type": "Metropolitan" },
+        { "name": "North East Lincolnshire Council", "type": "Unitary" },
+        { "name": "North Lincolnshire Council", "type": "Unitary" },
+        { "name": "North Yorkshire Council", "type": "Unitary" },
+        { "name": "Rotherham Metropolitan Borough Council", "type": "Metropolitan" },
+        { "name": "Sheffield City Council", "type": "Metropolitan" },
+        { "name": "Wakefield Metropolitan District Council", "type": "Metropolitan" },
+        { "name": "York City Council", "type": "Unitary" }
+      ]
+    },
+    {
+      "name": "East of England",
+      "councils": [
+        { "name": "Bedford Borough Council", "type": "Unitary" },
+        { "name": "Cambridgeshire County Council", "type": "County" },
+        { "name": "Central Bedfordshire Council", "type": "Unitary" },
+        { "name": "Essex County Council", "type": "County" },
+        { "name": "Hertfordshire County Council", "type": "County" },
+        { "name": "Luton Borough Council", "type": "Unitary" },
+        { "name": "Norfolk County Council", "type": "County" },
+        { "name": "Peterborough City Council", "type": "Unitary" },
+        { "name": "Southend-on-Sea City Council", "type": "Unitary" },
+        { "name": "Suffolk County Council", "type": "County" },
+        { "name": "Thurrock Council", "type": "Unitary" }
+      ]
+    }
+  ],
+  "councilTypes": [
+    "County",
+    "Unitary",
+    "Metropolitan",
+    "London Borough"
+  ],
+  "pipelineStatuses": [
+    "not_contacted",
+    "contacted",
+    "follow_up",
+    "responded",
+    "meeting_booked",
+    "terms_agreed",
+    "active_client",
+    "lost"
+  ],
+  "interactionTypes": [
+    "email",
+    "phone",
+    "linkedin",
+    "meeting",
+    "video_call",
+    "event"
+  ]
+}
