@@ -1,0 +1,12 @@
+node_modules
+.next
+.env.local
+.env
+out
+.remotion
+public/uploads
+*.log
+.DS_Store
+.turbo
+tsconfig.tsbuildinfo
+next-env.d.ts

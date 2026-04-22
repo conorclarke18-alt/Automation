@@ -7,6 +7,8 @@ Automate anything you do more than twice a week that doesn't require creative th
 - **[Playbook](playbook/)** - Step-by-step guide from identifying opportunities to advanced workflows
 - **[Templates](templates/)** - Ready-to-use templates for workflow design, auditing, and documentation
 - **[Tools](tools/)** - ROI calculator and automation audit spreadsheet
+- **[Documentary Studio](documentary-studio/)** - Next.js + Remotion studio for Fern-style YouTube long-form documentaries (script → ElevenLabs VO → archival B-roll → rendered MP4 with a documentary coach)
+- **[Fitness Trainer App](fitness-trainer-app/)** - FitCoach virtual personal trainer prototype
 
 ## Quick Start
 
