@@ -84,11 +84,38 @@ def whatsapp_message(name: str, job, miles: float | None, me: str, company: str)
 
 
 def whatsapp_link(phone: str | None, text: str) -> str | None:
-    """wa.me link that opens WhatsApp Web with the message pre-filled."""
+    """wa.me link - universal, but on desktop it shows an interstitial first."""
     number = normalise_phone(phone)
     if not number:
         return None
     return f"https://wa.me/{number}?text={quote(text)}"
+
+
+def whatsapp_web_link(phone: str | None, text: str) -> str | None:
+    """Straight into WhatsApp Web in the browser, no interstitial.
+
+    This is the one to use from a page opened in Chrome: it lands directly in
+    the already-logged-in WhatsApp Web session with the message typed out and
+    the cursor in the box, so sending is one click.
+    """
+    number = normalise_phone(phone)
+    if not number:
+        return None
+    return f"https://web.whatsapp.com/send?phone={number}&text={quote(text)}"
+
+
+def mailto_link(to: str | None, subject: str, body: str) -> str | None:
+    """mailto: that opens the default mail client with the draft filled in.
+
+    A stand-in for outlook_create_draft while the connector lacks
+    Mail.ReadWrite: clicking it in Chrome opens Outlook with the message
+    composed but unsent, which is the same end state as a draft.
+    """
+    if not to:
+        return None
+    # The address itself must keep its "@" - some mail clients reject %40.
+    return (f"mailto:{quote(to, safe='@.+_-')}"
+            f"?subject={quote(subject)}&body={quote(body)}")
 
 
 def email_draft(match, job, me: str, company: str, why_lines: list[str]) -> dict:

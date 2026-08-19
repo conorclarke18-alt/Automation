@@ -131,6 +131,9 @@ def main() -> None:
     p.add_argument("--me", default="Conor")
     p.add_argument("--company", default="Pro Social Partners")
     p.add_argument("--json-out", help="Write outreach payload here")
+    p.add_argument("--context", help="JSON with facts/extras/warnings for the report")
+    p.add_argument("--docx-out", help="Write a Word campaign sheet with clickable links")
+    p.add_argument("--html-out", help="Write an HTML campaign sheet with buttons")
     a = p.parse_args()
 
     job = Job.parse(
@@ -140,6 +143,14 @@ def main() -> None:
         perks=[x.strip() for x in a.perks.split(";") if x.strip()],
     )
     matches = find(a.db, job, limit=a.limit, min_score=a.min_score)
+
+    context = {}
+    if a.context:
+        with open(a.context, encoding="utf-8") as fh:
+            context = json.load(fh)
+    job_facts = context.get("facts", [])
+    extras = [(e["name"], e["why"]) for e in context.get("extras", [])]
+    warnings = context.get("warnings", [])
 
     spec_labels = ", ".join(domain.SPECIALISMS[s]["label"] for s in sorted(job.specialisms)) or "unspecified"
     print(f"# {job.client} - {job.title}\n")
@@ -161,6 +172,8 @@ def main() -> None:
                 print(f"- **CHECK:** {f}")
         wa_text = outreach.whatsapp_message(m.name, job, m.miles, a.me, a.company)
         wa_link = outreach.whatsapp_link(m.phone, wa_text)
+        wa_web = outreach.whatsapp_web_link(m.phone, wa_text)
+        draft = outreach.email_draft(m, job, a.me, a.company, candidate_why(m, job))
         print(f"- WhatsApp: {wa_link or 'no usable mobile number'}")
         print()
         payload.append({
@@ -168,10 +181,46 @@ def main() -> None:
             "location": m.location, "postcode": m.postcode, "miles": m.miles,
             "reasons": reasons, "flags": m.flags, "parts": m.parts,
             "whatsapp_text": wa_text, "whatsapp_link": wa_link,
+            "whatsapp_web_link": wa_web,
             # Internal reasons stay in `reasons`; the email gets the safe set.
-            "email_draft": outreach.email_draft(m, job, a.me, a.company,
-                                                candidate_why(m, job)),
+            "email_draft": draft,
+            "mailto_link": outreach.mailto_link(m.email, draft["subject"], draft["body"]),
         })
+
+    def tier_of(c):
+        spec = c["parts"]["specialism"]
+        mi = c["miles"] if c["miles"] is not None else 999
+        if spec >= 0.9 and mi <= 40:
+            return "A"
+        if spec >= 0.9:
+            return "B"
+        if mi <= 25:
+            return "C"
+        return "D"
+
+    TIER_TEXT = {
+        "A": ("A. Right specialism, commutable - go first",
+              "They have done this work and they can get there."),
+        "B": ("B. Right specialism, longer commute",
+              "Real depth in the specialism. Lead with the package, not the postcode."),
+        "C": ("C. Frontline on the doorstep",
+              "No direct specialism on record, but close enough that the commute sells itself."),
+        "D": ("D. Frontline, wider net",
+              "Safeguarding and assessment people who would consider this team."),
+    }
+    tiers = [(TIER_TEXT[t][0], TIER_TEXT[t][1],
+              [c for c in payload if tier_of(c) == t]) for t in "ABCD"]
+    job_meta = {"client": job.client, "title": job.title, "facts": job_facts}
+
+    if a.docx_out:
+        from psp import docx_report
+        docx_report.build(a.docx_out, job_meta, tiers, extras, warnings)
+        print(f"\nWord campaign sheet written to {a.docx_out}")
+    if a.html_out:
+        from psp import report
+        with open(a.html_out, "w", encoding="utf-8") as fh:
+            fh.write(report.render(job_meta, tiers, extras, warnings))
+        print(f"HTML campaign sheet written to {a.html_out}")
 
     if a.json_out:
         with open(a.json_out, "w", encoding="utf-8") as fh:
