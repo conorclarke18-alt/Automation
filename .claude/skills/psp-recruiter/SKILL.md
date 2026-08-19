@@ -46,6 +46,38 @@ ingests the connector's text rendering instead — but the connector truncates
 large sheets, so it will only ever see the first slice of the master list. Say
 so rather than presenting a partial shortlist as complete.
 
+## Step 2b — Mine the mailbox for expressed interest
+
+**Do not skip this.** It is the only source that captures what a candidate has
+actually *said* they want, and it routinely overturns what the spreadsheets
+imply. A person filed under Oxford who emailed last week saying "I am
+interested in CWD, Knowsley and Herefordshire" is not an Oxford candidate with
+a commuting problem — they are a mobile CWD candidate, and no postcode column
+will ever tell you that.
+
+Search Outlook for the specialism in the candidate's own words:
+
+- `outlook_email_search` with the specialism (`"children with disabilities"`,
+  `CWD`), then again scoped to `folderName: "Inbox"` so you see **inbound**
+  replies rather than Conor's own mailers.
+- Look for: replies to the weekly vacancy mailer naming this specialism,
+  "Application: <role>" emails, and unsolicited CVs.
+- Read the promising ones in full with `read_resource`. The one-line summary
+  hides the useful detail.
+
+What you learn here outranks the spreadsheet:
+
+| Signal in the mailbox | What it means |
+|---|---|
+| Named this specialism unprompted | Treat as a hot lead regardless of postcode |
+| Named other regions they would take | They are mobile - drop the distance filter |
+| Sent a CV in the last month | Actively looking right now |
+| Applied for a similar role elsewhere | Already sold on the specialism |
+| Said they only want part-time / adults / a patch | Exclude, and say why |
+
+Cross-check every name against the tracker before presenting: someone who has
+emailed about a role may already be in a live process for it.
+
 ## Step 3 — Shortlist
 
 ```bash
@@ -71,17 +103,29 @@ For every person on the shortlist, give Conor three things:
    which, because they are not equally reliable).
 3. **Where they live** — the real distance, so Conor can judge it.
 
-## Step 5 — Outreach
+## Step 5 — Present the list, then wait
 
-WhatsApp links and email drafts come out of the same run. Both **sell the role**:
-package first, then the team and the permanence, then why this person fits.
+**Always list the candidates before writing anything into Outlook.** Conor
+approves the list first; the drafts are a separate, explicitly authorised step.
+Presenting a shortlist and creating drafts in the same breath is wrong even
+when the shortlist is good.
 
-Create the email drafts in Outlook with `outlook_create_draft`, one per
-candidate, using the `email_draft` block from the JSON. Drafts only — never
-`outlook_send_mail`.
+Give him the WhatsApp links with the list — those are click-to-send and cost
+nothing until he presses send. Each opens WhatsApp Web with the message
+pre-filled.
 
-Hand the WhatsApp links over as a clickable list. Each opens WhatsApp Web with
-the message pre-filled; Conor presses send.
+## Step 6 — Drafts, once he says go
+
+Create one draft per approved candidate with `outlook_create_draft`, using the
+`email_draft` block from the JSON. Drafts only — never `outlook_send_mail`.
+
+Both channels **sell the role**: package first, then the team and the
+permanence, then why this person fits.
+
+Send the candidate-safe reasons, never the internal ones. The briefing cites
+prior rejections, other clients' offers and named employers; the candidate gets
+none of it. `find_candidates.py` already separates the two — use the
+`email_draft` block as generated and do not paste the briefing bullets in.
 
 ## Rules that override the score
 
