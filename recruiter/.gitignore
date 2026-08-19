@@ -1,0 +1,6 @@
+# Candidate personal data must never be committed.
+data/
+*.db
+*.xlsx
+*.csv
+demo.json
