@@ -38,16 +38,31 @@ def why_lines(m, job) -> list[str]:
         lines.append(f"{verb} for {h['job_title']} at {job.client}"
                      f"{' in ' + h['submitted'] if h['submitted'] else ''} - the client already knows them")
     else:
-        others = sorted({h["client"] for h in m.history})
-        if others:
-            lines.append(f"placed into process with {', '.join(others[:4])} through us before")
+        # An offer elsewhere is the single strongest thing we can say, so it
+        # gets its own line rather than being folded into a client list.
+        offers = [h for h in m.history if h["outcome"] in ("offered", "offer_lapsed")]
+        for h in offers[:2]:
+            lines.append(f"OFFERED {h['job_title']} at {h['client']} - a client has already "
+                         "said yes to this person")
+        rejected = sorted({h["client"] for h in m.history
+                           if h["outcome"] in ("rejected_at_interview", "interviewed")})
+        if rejected:
+            lines.append(f"interviewed via us at {', '.join(rejected[:4])}")
 
     if m.position:
         lines.append(f"currently {m.position}"
                      + (f", which is {domain.GRADE_LABEL.get(m.grade, m.grade)} level" if m.grade else ""))
-    spec = [h["job_title"] for h in m.history][:3]
-    if spec:
-        lines.append("previously put forward for " + "; ".join(spec))
+
+    # Real roles only, de-duplicated. "Placement" is a bookkeeping row.
+    seen, roles = set(), []
+    for h in m.history:
+        title = (h["job_title"] or "").strip()
+        if not title or title.lower() == "placement" or title.lower() in seen:
+            continue
+        seen.add(title.lower())
+        roles.append(title)
+    if roles:
+        lines.append("previously put forward for " + "; ".join(roles[:4]))
     # Conor's briefing keeps the real distance - he needs to judge it. Only the
     # candidate-facing messages soften it.
     where = m.location or m.postcode
@@ -63,6 +78,34 @@ def why_lines(m, job) -> list[str]:
     return lines
 
 
+def candidate_why(m, job) -> list[str]:
+    """Candidate-facing reasons. A different audience from why_lines().
+
+    Conor's briefing cites rejections, prior offers and named clients. None of
+    that can go to the candidate: it exposes other clients' decisions, reveals
+    that we track their knockbacks, and reads as sales copy about them rather
+    than to them. This says only what is true, flattering and theirs to know.
+    """
+    lines = []
+    spec = ", ".join(domain.SPECIALISMS[s]["label"] for s in sorted(job.specialisms))
+    if spec and m.parts.get("specialism", 0) >= 0.9:
+        lines.append(f"Your background is squarely in {spec}, which is exactly this team")
+    elif spec:
+        lines.append(f"Your experience carries across well into {spec}")
+    if m.position and m.grade == job.grade:
+        lines.append(f"It is a {domain.GRADE_LABEL.get(job.grade, job.grade)} post, "
+                     "so it matches the level you are already working at")
+    elif m.grade and job.grade and domain.grade_distance(m.grade, job.grade) == -1:
+        lines.append("It would be a step up from where you are now")
+    if m.needs_sponsorship:
+        lines.append("This client is able to offer sponsorship")
+    elif m.mobile:
+        lines.append("You had mentioned being open to a move, and this is a permanent post")
+    elif m.miles is not None and m.miles <= 45:
+        lines.append("The location is very manageable from you")
+    return lines
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -74,7 +117,9 @@ def main() -> None:
     p.add_argument("--salary-from", type=float)
     p.add_argument("--salary-to", type=float)
     p.add_argument("--salary-text", help="Override, e.g. 'a package of £61,920'")
-    p.add_argument("--perks", default="", help="Comma separated, e.g. '£5k golden hello,hybrid working'")
+    # Semicolon, not comma: perks routinely contain "£5,000".
+    p.add_argument("--perks", default="",
+                   help="Semicolon separated, e.g. 'a £5,000 golden hello;hybrid working'")
     p.add_argument("--team", help="Team name, used in the email pitch")
     p.add_argument("--sponsors", action="store_true",
                    help="Client can sponsor visas. Without this, candidates who "
@@ -92,7 +137,7 @@ def main() -> None:
         a.client, a.title, a.postcode, sector=a.sector, sponsors=a.sponsors,
         max_miles=a.max_miles, salary_from=a.salary_from, salary_to=a.salary_to,
         salary_text=a.salary_text, team=a.team,
-        perks=[x.strip() for x in a.perks.split(",") if x.strip()],
+        perks=[x.strip() for x in a.perks.split(";") if x.strip()],
     )
     matches = find(a.db, job, limit=a.limit, min_score=a.min_score)
 
@@ -107,8 +152,8 @@ def main() -> None:
     for i, m in enumerate(matches, 1):
         reasons = why_lines(m, job)
         print(f"## {i}. {m.name}  ({m.score}/100)")
-        print(f"`{m.phone or 'no phone'}`  |  `{m.email or 'no email'}`  |  "
-              f"{m.location or 'location unknown'} {m.postcode or ''}".rstrip())
+        place = " ".join(x for x in (m.location, m.postcode) if x) or "location unknown"
+        print(f"`{m.phone or 'no phone'}`  |  `{m.email or 'no email'}`  |  {place}")
         for line in reasons:
             print(f"- {line}")
         if m.flags:
@@ -123,7 +168,9 @@ def main() -> None:
             "location": m.location, "postcode": m.postcode, "miles": m.miles,
             "reasons": reasons, "flags": m.flags, "parts": m.parts,
             "whatsapp_text": wa_text, "whatsapp_link": wa_link,
-            "email_draft": outreach.email_draft(m, job, a.me, a.company, reasons),
+            # Internal reasons stay in `reasons`; the email gets the safe set.
+            "email_draft": outreach.email_draft(m, job, a.me, a.company,
+                                                candidate_why(m, job)),
         })
 
     if a.json_out:

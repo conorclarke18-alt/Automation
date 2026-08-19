@@ -103,7 +103,9 @@ def email_draft(match, job, me: str, company: str, why_lines: list[str]) -> dict
     fields = {
         "first": first_name(match.name), "me": me, "company": company,
         "client": job.client, "title": job.title,
-        "money_suffix": f" ({money})" if money else "",
+        # A long package description belongs in the body, not the subject line,
+        # where it gets truncated by the mail client anyway.
+        "money_suffix": f" ({money})" if money and len(money) <= 28 else "",
     }
 
     selling: list[str] = []

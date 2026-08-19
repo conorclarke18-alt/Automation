@@ -25,6 +25,9 @@ MOBILE_WEIGHTS = {"specialism": 38.0, "grade": 26.0, "commute": 6.0, "history": 
 # score is 0..1 on the history axis; the note is written into the shortlist.
 HISTORY_SIGNALS = {
     "offered":            (1.00, "was OFFERED by this client before"),
+    "offer_lapsed":       (0.90, "was offered here but never started - worth reopening"),
+    "placed":             (0.05, "we PLACED them here - do not approach"),
+    "rejected_at_interview": (0.50, "interviewed here and was not offered"),
     "interviewed":        (0.85, "has interviewed with this client"),
     "interview_withdrawn": (0.55, "interviewed here before but withdrew"),
     "submitted":          (0.65, "submitted to this client before"),
@@ -130,7 +133,8 @@ def _history_for(rows: list[dict], job: Job) -> tuple[float, list[str], list[str
         months = _months_since(r["submitted"])
         # Same client AND same specialism that already failed = don't re-run it.
         same_team = bool(job.specialisms & set(filter(None, r["specialisms"].split(","))))
-        if same_team and r["outcome"] in ("interviewed", "interview_withdrawn"):
+        if same_team and r["outcome"] in ("interviewed", "interview_withdrawn",
+                                          "rejected_at_interview"):
             flags.append(
                 f"already interviewed for {r['job_title']} here"
                 f"{f' {months:.0f} months ago' if months else ''} - pitch a different team")
@@ -162,7 +166,8 @@ def _history_for(rows: list[dict], job: Job) -> tuple[float, list[str], list[str
             reasons.append("no submission history on file")
 
     # Serial shortlister: many interviews, never converts. Worth flagging.
-    ivs_all = [r for r in rows if r["outcome"] in ("interviewed", "interview_withdrawn")]
+    ivs_all = [r for r in rows if r["outcome"] in ("interviewed", "interview_withdrawn",
+                                                   "rejected_at_interview")]
     if len(ivs_all) >= 4 and not any(r["outcome"] == "offered" for r in rows):
         flags.append(f"{len(ivs_all)} interviews via us, never offered - interview coaching first")
 
@@ -234,6 +239,11 @@ def find(db: str, job: Job, limit: int = 15, min_score: float = 35.0) -> list[Ma
 
         # Only exclude on distance when they are actually anchored.
         if miles is not None and miles > job.max_miles and not will_move:
+            continue
+
+        # Never poach a client's own staff back into that client's vacancy.
+        if any(h["client"].lower() == job.client.lower() and h["outcome"] == "placed"
+               for h in history_rows):
             continue
 
         total = (s_score * weights["specialism"] + g_score * weights["grade"]

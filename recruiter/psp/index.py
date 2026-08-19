@@ -75,6 +75,11 @@ def name_key(name: str | None) -> str:
 # withdrawal, not an interview we should count as progress.
 OUTCOME_PATTERNS: list[tuple[str, str]] = [
     (r"offer", "offered"),
+    # Explicit rejection after interview: they met the client and were turned
+    # down. Warmer than never having been seen, colder than a live interview.
+    (r"rejected.at.interview|rejected|unsuccessful|not offered", "rejected_at_interview"),
+    (r"didn.?t.?start|didnt_start", "offer_lapsed"),
+    (r"^paid$|placement.*paid", "placed"),
     (r"another agency|went directly|applied directly|new job|new role|got a job",
      "lost_to_other"),
     # normalise() strips curly apostrophes to spaces, so "didn't" arrives as
